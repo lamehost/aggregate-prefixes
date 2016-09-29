@@ -5,7 +5,7 @@ import fileinput
 import sys
 
 
-def aggregate(prefixes):
+def aggregate_prefixes(prefixes):
 	aggregates=list()
 	prefixes=sorted([ipaddr.IPNetwork(p) for p in prefixes], key=lambda p: p.network)
 	larger=prefixes[0]
@@ -39,12 +39,8 @@ def aggregate(prefixes):
 
 
 def main():
-	prefixes=set()
-	for line in fileinput.input():
-		prefixes.add(line.strip())
-
-	for prefix in aggregate(prefixes):
-		print prefix
+	prefixes=set([_.strip() for _ in fileinput.input()])
+	print '\n'.join([_ for _ in aggregate_prefixes(prefixes)])
 
 
 if __name__ == '__main__':
