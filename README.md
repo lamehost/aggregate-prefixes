@@ -1,5 +1,5 @@
-# Aggregate-prefixes
+# aggregate-prefixes
 Fast(?) prefix aggregator written in Pyrhon.  
 
-Takes a list of prefixes (one per row) from STDIN and prints the results to STDOUT.  
+Takes a list of prefixes (one per row) from STDIN and returns result to STDOUT.  
 Errors go to STDERR.
