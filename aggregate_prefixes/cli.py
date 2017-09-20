@@ -7,7 +7,11 @@ import sys
 
 def aggregate_prefixes(prefixes):
 	aggregates=list()
-	prefixes=sorted([ipaddr.IPNetwork(p) for p in prefixes], key=lambda p: p.network)
+	try:
+		prefixes=sorted([ipaddr.IPNetwork(p) for p in prefixes], key=lambda p: p.network)
+	except Exception, e:
+		print e
+		sys.exit()
 	larger=prefixes[0]
 	starting_prefixlen = larger.prefixlen
 	for prefix in prefixes[1:]:
@@ -44,7 +48,4 @@ def main():
 
 
 if __name__ == '__main__':
-	try:
-		main()
-	except Exception, e:
-		sys.stderr.write('%s' % e)
+	main()
