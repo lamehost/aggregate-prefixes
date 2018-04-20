@@ -8,7 +8,7 @@ import sys
 def aggregate_prefixes(prefixes):
   aggregates=list()
   try:
-    prefixes=sorted([ipaddr.IPNetwork(p) for p in prefixes], key=lambda p: p.network)
+    prefixes=sorted([ipaddr.IPNetwork(p) for p in prefixes], key=lambda p: (p.network, p.prefixlen))
   except Exception, e:
     print e
     sys.exit()
