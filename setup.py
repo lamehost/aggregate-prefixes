@@ -1,6 +1,9 @@
 import uuid
 from setuptools import setup,find_packages
-from pip.req import parse_requirements
+try: # for pip >= 10
+	from pip._internal.req import parse_requirements
+except ImportError: # for pip <= 9.0.3
+	from pip.req import parse_requirements
 import codecs
 
 import aggregate_prefixes as this_package
