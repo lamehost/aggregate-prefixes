@@ -13,7 +13,7 @@ def main():
     prefixes = ifilter(None, set([_.strip() for _ in fileinput.input()]))
     try:
         aggregates = aggregate_prefixes(prefixes)
-    except ValueError, error:
+    except (ValueError, TypeError), error:
         sys.exit(error)
     print '\n'.join(aggregates)
 
