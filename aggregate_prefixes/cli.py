@@ -49,7 +49,7 @@ def main():
     args = parser.parse_args()
 
     # Read and cleanup prefixes
-    prefixes = [_ for _ in set([_.strip() for _ in args.prefixes]) if _]
+    prefixes = [_ for _ in set([_.strip() for _ in args.prefixes if not _.startswith('#')]) if _]
     try:
         aggregates = aggregate_prefixes(prefixes, args.max_length, args.verbose)
     except (ValueError, TypeError) as error:
