@@ -24,6 +24,7 @@ setup(
 	url=this_package.__url__,
 	version=this_package.__version__,
 	packages=[this_package.__name__],
+	setup_requires=["nose", "coverage", "mock"],
 	install_requires=reqs,
 	include_package_data=True,
 	entry_points={
@@ -32,5 +33,6 @@ setup(
 		],
 	},
 	long_description=README,
-	zip_safe=False
+	zip_safe=False,
+	test_suite='nose.collector'
 )
