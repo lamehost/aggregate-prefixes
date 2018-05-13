@@ -27,10 +27,12 @@ def main():
     parser.add_argument(
         'prefixes',
         type=argparse.FileType('r'),
+        help='Unsorted list of IPv4 or IPv6 prefixes. Use \'-\' for STDIN.',
         default=sys.stdin
     )
     parser.add_argument(
         '--max-length', '-m',
+        nargs='?',
         metavar='LENGTH',
         type=int,
         help='Discard longer prefixes prior to processing',
@@ -53,7 +55,7 @@ def main():
     try:
         aggregates = aggregate_prefixes(prefixes, args.max_length, args.verbose)
     except (ValueError, TypeError) as error:
-        sys.exit(error)
+        sys.exit('ERROR: %s' % error)
     print('\n'.join(aggregates))
 
 
