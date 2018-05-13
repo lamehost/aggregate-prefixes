@@ -106,7 +106,7 @@ def aggregate_prefixes(prefixes, max_length=128, debug=False):
             # Assume new aggregate is this contigous
             aggregate = first_contigous
             tentative_len = first_contigous.prefixlen
-            while True:
+            while tentative_len > 0:
                 tentative_len -= 1
                 # Calculate new tentative prefix
                 tentative = ipaddr.IPNetwork('%s/%d' % (first_contigous.network, tentative_len))
@@ -157,4 +157,3 @@ def aggregate_prefixes(prefixes, max_length=128, debug=False):
         print("", file=sys.stderr)
 
     return ['%s/%d' % (a.network, a.prefixlen) for a in aggregates]
-    
