@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 
+"""
+Regression tests for package aggregate-prefixes
+"""
+
 from __future__ import absolute_import
 
 import io
@@ -36,8 +40,10 @@ def stub_stdouts(testcase_inst):
     sys.stdout = StringIO()
 
 
-class TestAggregate(unittest.TestCase):
-
+class TestAggregatePrefixes(unittest.TestCase):
+    """
+    Provide regression tests for package aggregate-prefixes
+    """
     def test_00__default_wins(self):
         """Test if default covers all the other prefixes"""
         self.assertEqual(aggregate_prefixes(["0.0.0.0/0", "10.0.0.0/16"]),
@@ -86,14 +92,15 @@ class TestAggregate(unittest.TestCase):
         )
 
     def test_07__main(self):
-        """Test if it can handle empty lines and comments"""
-        stub_stdin(self, '1.1.1.24/29\n1.1.1.0/24\n#this_is_no_prefix\n1.1.1.1/32\n1.1.0.0/24\n\n')
+        """Test if it can handle empty lines, spaces and comments"""
+        stub_stdin(self, '1.1.1.24/29\n1.1.1.0/24\n#this_is_no_prefix\n1.1.1.1/32 1.1.0.0/24\n\n')
         stub_stdouts(self)
         with patch.object(sys, 'argv', ["prog.py", "-"]):
             cli_main()
         self.assertEqual(sys.stdout.getvalue(), '1.1.0.0/23\n')
 
     def test_08__maxlength(self):
+        """Test if max-length is handled correctly"""
         stub_stdin(self, '10.0.0.0/24\n10.0.1.0/25\n10.0.1.128/25\n')
         stub_stdouts(self)
         with patch.object(sys, 'argv', ["prog.py", "-m", "24", "-"]):
@@ -102,10 +109,7 @@ class TestAggregate(unittest.TestCase):
 
 
 class StringIO(io.StringIO):
-    """
-    A "safely" wrapped version
-    """
-
+    """A "safely" wrapped version of StringIO"""
     def __init__(self, value=''):
         value = value.encode('utf8', 'backslashreplace').decode('utf8')
         io.StringIO.__init__(self, value)
@@ -116,7 +120,9 @@ class StringIO(io.StringIO):
 
 
 def main():
+    """Run unittest"""
     unittest.main()
+
 
 if __name__ == '__main__':
     main()
