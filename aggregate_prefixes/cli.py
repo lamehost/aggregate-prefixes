@@ -51,7 +51,14 @@ def main():
     args = parser.parse_args()
 
     # Read and cleanup prefixes
-    prefixes = [_ for _ in set([_.strip() for _ in args.prefixes if not _.startswith('#')]) if _]
+    prefixes = [
+        p for p in set([
+            # Read lines in split those after whitespaces, skip comments and return the rest
+            p.strip() for line in args.prefixes for p in line.split(' ') if not p.startswith('#')
+        ])
+        # Skip empty strings
+        if p
+    ]
     try:
         aggregates = aggregate_prefixes(prefixes, args.max_length, args.verbose)
     except (ValueError, TypeError) as error:
