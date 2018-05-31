@@ -25,9 +25,9 @@
 import uuid
 from setuptools import setup,find_packages
 try: # for pip >= 10
-	from pip._internal.req import parse_requirements
+    from pip._internal.req import parse_requirements
 except ImportError: # for pip <= 9.0.3
-	from pip.req import parse_requirements
+    from pip.req import parse_requirements
 import codecs
 
 import aggregate_prefixes as this_package
@@ -42,23 +42,24 @@ install_reqs = parse_requirements('requirements.txt', session=uuid.uuid1())
 reqs = [str(ir.req) for ir in install_reqs]
 
 setup(
-	name=this_package.__name__,
-	author=this_package.__author__,
-	author_email=this_package.__author_email__,
-	description=this_package.__description__,
-	license=this_package.__license__,
-	url=this_package.__url__,
-	version=this_package.__version__,
-	packages=[this_package.__name__],
-	setup_requires=["nose", "coverage", "mock"],
-	install_requires=reqs,
-	include_package_data=True,
-	entry_points={
-		'console_scripts': [
-			'aggregate-prefixes = aggregate_prefixes.cli:main',
-		],
-	},
-	long_description=README,
-	zip_safe=False,
-	test_suite='nose.collector'
+    name=this_package.__name__,
+    author=this_package.__author__,
+    author_email=this_package.__author_email__,
+    description=this_package.__description__,
+    license=this_package.__license__,
+    url=this_package.__url__,
+    version=this_package.__version__,
+    packages=[this_package.__name__],
+    setup_requires=["nose", "coverage", "mock"],
+    install_requires=reqs,
+    include_package_data=True,
+    entry_points={
+        'console_scripts': [
+            'aggregate-prefixes = aggregate_prefixes.cli:main',
+        ],
+    },
+    long_description=README,
+    long_description_content_type='text/markdown',
+    zip_safe=False,
+    test_suite='nose.collector'
 )
