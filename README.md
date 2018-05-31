@@ -25,7 +25,7 @@ optional arguments:
 </pre>
 
 # Usage as module
-```python
+```
 $ python
 Python 2.7.14+ (default, Apr  2 2018, 04:16:25) 
 [GCC 7.3.0] on linux2
