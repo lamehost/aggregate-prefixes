@@ -151,7 +151,6 @@ def aggregate_prefixes(prefixes, max_length=128, debug=False):
                         aggregate, aggregate.network, aggregate.broadcast
                     ), file=sys.stderr
                 )
-            aggregates.append(aggregate)
             # Find how many contigous the aggregate spans
             covered_id = contigous_id + 1
             while covered_id < total_contigous:
@@ -174,9 +173,9 @@ def aggregate_prefixes(prefixes, max_length=128, debug=False):
                 )
             contigous_id = covered_id
 
+            yield '%s/%d' % (aggregate.network, aggregate.prefixlen)
+
         if debug:
             print("<-- LOOP END", file=sys.stderr)
     if debug:
         print("", file=sys.stderr)
-
-    return ['%s/%d' % (a.network, a.prefixlen) for a in aggregates]
