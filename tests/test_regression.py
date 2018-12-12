@@ -46,18 +46,18 @@ class TestAggregatePrefixes(unittest.TestCase):
     """
     def test_00__default_wins(self):
         """Test if default covers all the other prefixes"""
-        self.assertEqual(aggregate_prefixes(["0.0.0.0/0", "10.0.0.0/16"]),
+        self.assertEqual(list(aggregate_prefixes(["0.0.0.0/0", "10.0.0.0/16"])),
                          ["0.0.0.0/0"])
 
     def test_01__join_two(self):
         """Test if contigous prefixes get aggregated"""
-        self.assertEqual(aggregate_prefixes(["10.0.0.0/8", "11.0.0.0/8"]),
+        self.assertEqual(list(aggregate_prefixes(["10.0.0.0/8", "11.0.0.0/8"])),
                          ["10.0.0.0/7"])
 
     def test_02__mix_v4_v6_default(self):
         """Test if error is raised when mixing IPv4 and IPv6"""
         with self.assertRaises(Exception) as context:
-            aggregate_prefixes(["0.0.0.0/0", "::/0"])
+            list(aggregate_prefixes(["0.0.0.0/0", "::/0"]))
         self.assertTrue("are not of the same version" in str(context.exception))
 
     def test_03__lot_of_ipv4(self):
@@ -65,7 +65,7 @@ class TestAggregatePrefixes(unittest.TestCase):
         pfxs = []
         for i in range(0, 256):
             pfxs.append("{}.0.0.0/8".format(i))
-        self.assertEqual(aggregate_prefixes(pfxs), ["0.0.0.0/0"])
+        self.assertEqual(list(aggregate_prefixes(pfxs)), ["0.0.0.0/0"])
 
     def test_04__lot_of_ipv4_holes(self):
         """Test if non contigous IPv4 prefixes are handled correctly"""
@@ -74,18 +74,18 @@ class TestAggregatePrefixes(unittest.TestCase):
             pfxs.append("{}.0.0.0/8".format(i))
         outcome = ["5.0.0.0/8", "6.0.0.0/7", "8.0.0.0/5", "16.0.0.0/4",
                    "32.0.0.0/3", "64.0.0.0/2", "128.0.0.0/2", "192.0.0.0/5"]
-        self.assertEqual(aggregate_prefixes(pfxs), outcome)
+        self.assertEqual(list(aggregate_prefixes(pfxs)), outcome)
 
     def test_05__reduce_dups(self):
         """Test if duplicates are removed"""
-        self.assertEqual(aggregate_prefixes(["2001:db8::/32", "2001:db8::/32"]),
+        self.assertEqual(list(aggregate_prefixes(["2001:db8::/32", "2001:db8::/32"])),
                          ["2001:db8::/32"])
 
     def test_06__non_ip_input(self):
         """Test if error is raised with non IP input"""
         stub_stdouts(self)
         with self.assertRaises(Exception) as context:
-            aggregate_prefixes(["this_is_no_prefix", "10.0.0.0/24"])
+            list(aggregate_prefixes(["this_is_no_prefix", "10.0.0.0/24"]))
         self.assertTrue(
             "'this_is_no_prefix' does not appear to be an IPv4 or IPv6 network" \
             in str(context.exception)
