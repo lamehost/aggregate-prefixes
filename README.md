@@ -1,5 +1,5 @@
 # aggregate-prefixes
-Fast IPv4 and IPv6 prefix aggregator written in Pyrhon.  
+Fast IPv4 and IPv6 prefix aggregator written in Python.  
 
 Gets a list of unsorted IPv4 or IPv6 prefixes from argument or SDTIN and returns a sorted list of aggregates to STDOUT
 Errors go to STDERR.
