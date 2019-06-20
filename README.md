@@ -6,22 +6,24 @@ Errors go to STDERR.
 
 ## CLI Syntax for executable
 <pre>
-usage: aggregate-prefixes [-h] [--max-length [LENGTH]] [--verbose] [--version]
+usage: aggregate-prefixes [-h] [--max-length [LENGTH]] [--truncate [MASK]]
+                          [--verbose] [--version]
                           prefixes
 
 Aggregates IPv4 or IPv6 prefixes from file or STDIN
 
 positional arguments:
-  prefixes              Unsorted list of IPv4 or IPv6 prefixes. Use '-' for
-                        STDIN.
+  prefixes              Text file of unsorted list of IPv4 or IPv6 prefixes.
+                        Use '-' for STDIN.
 
 optional arguments:
   -h, --help            show this help message and exit
   --max-length [LENGTH], -m [LENGTH]
                         Discard longer prefixes prior to processing
+  --truncate [MASK], -t [MASK]
+                        Ttruncate IP/mask to network/mask
   --verbose, -v         Display verbose information about the optimisations
   --version, -V         show program's version number and exit
-
 </pre>
 
 # Usage as module
