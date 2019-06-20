@@ -32,7 +32,7 @@ from __future__ import print_function
 import argparse
 import sys
 
-from aggregate_prefixes.aggregate_prefixes import aggregate_prefixes
+from aggregate_prefixes import aggregate_prefixes
 from aggregate_prefixes import __version__ as VERSION
 
 def main():
@@ -50,7 +50,7 @@ def main():
     parser.add_argument(
         'prefixes',
         type=argparse.FileType('r'),
-        help='Unsorted list of IPv4 or IPv6 prefixes. Use \'-\' for STDIN.',
+        help='Text file of unsorted list of IPv4 or IPv6 prefixes. Use \'-\' for STDIN.',
         default=sys.stdin
     )
     parser.add_argument(
@@ -59,6 +59,14 @@ def main():
         metavar='LENGTH',
         type=int,
         help='Discard longer prefixes prior to processing',
+        default=128
+    )
+    parser.add_argument(
+        '--truncate', '-t',
+        nargs='?',
+        metavar='MASK',
+        type=int,
+        help='Ttruncate IP/mask to network/mask',
         default=128
     )
     parser.add_argument(
@@ -83,7 +91,7 @@ def main():
         if p
     ]
     try:
-        aggregates = aggregate_prefixes(prefixes, args.max_length, args.verbose)
+        aggregates = aggregate_prefixes(prefixes, args.max_length, args.truncate, args.verbose)
     except (ValueError, TypeError) as error:
         sys.exit('ERROR: %s' % error)
     print('\n'.join(aggregates))

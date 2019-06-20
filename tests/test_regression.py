@@ -13,7 +13,7 @@ import unittest
 
 from mock import patch
 
-from aggregate_prefixes.aggregate_prefixes import aggregate_prefixes
+from aggregate_prefixes import aggregate_prefixes
 from aggregate_prefixes.cli import main as cli_main
 
 
@@ -106,6 +106,14 @@ class TestAggregatePrefixes(unittest.TestCase):
         with patch.object(sys, 'argv', ["prog.py", "-m", "24", "-"]):
             cli_main()
         self.assertEqual(sys.stdout.getvalue(), '10.0.0.0/24\n')
+
+    def test_09__truncate(self):
+        """Test if truncate is handled correctly"""
+        stub_stdin(self, '10.0.0.1/32\n10.0.0.2/32\n10.0.0.3/32\n')
+        stub_stdouts(self)
+        with patch.object(sys, 'argv', ["prog.py", "-t", "31", "-"]):
+            cli_main()
+        self.assertEqual(sys.stdout.getvalue(), '10.0.0.0/30\n')
 
 
 class StringIO(io.StringIO):

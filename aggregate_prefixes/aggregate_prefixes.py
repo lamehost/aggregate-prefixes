@@ -35,11 +35,11 @@ import sys
 import ipaddr
 
 
-def aggregate_prefixes(prefixes, max_length=128, debug=False):
+def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
     """
     Aggregates IPv4 or IPv6 prefixes.
 
-    Gets a list of unsorted IPv4 or IPv6 prefixes and returns a sorted list of aggregates.
+    Gets a list of unsorted IPv4 or IPv6 prefixes and returns a sorted iterable of aggregates.
 
     Parameters
     ----------
@@ -47,16 +47,18 @@ def aggregate_prefixes(prefixes, max_length=128, debug=False):
         Unsorted list of IPv4 or IPv6 prefixes serialized as strings or ipaddr objects
     max_length: int
         Discard longer prefixes prior to processing
+    truncate:
+        Truncate IP/mask to network/mask
     debug: bool
         Write debug information on STDOUT
 
     Returns
     -------
-    list
-        Sorted list of IPv4 or IPv6 aggregated prefixes serialized as strings
+    generator
+        Sorted iterable of IPv4 or IPv6 aggregated prefixes serialized as strings
 
     """
-    aggregates = list()
+
     # Sort and filter prefixes. Smaller network goes firt, on tie larger prefixlen wins
     prefixes = sorted(
         [p for p in [ipaddr.IPNetwork(p) for p in prefixes] if p.prefixlen <= max_length],
@@ -76,6 +78,17 @@ def aggregate_prefixes(prefixes, max_length=128, debug=False):
                     prefix, prefix.network, prefix.broadcast
                 ), file=sys.stderr
             )
+
+        # Truncate
+        if truncate and prefix.prefixlen > truncate:
+            prefix = ipaddr.IPNetwork('%s/%d' % (prefix.network, truncate))
+            if debug:
+                print(
+                    "TRUNCATED: %s (Network: %s, Broadcast: %s to )" % (
+                        prefix, prefix.network, prefix.broadcast
+                    ), file=sys.stderr
+                )
+
         # Assuming current is the only contigous prefix in the list
         contigous_prefixes = [prefix]
         last_contigous = prefix
@@ -91,6 +104,16 @@ def aggregate_prefixes(prefixes, max_length=128, debug=False):
                         next_prefix, next_prefix.network, next_prefix.broadcast
                     ), file=sys.stderr
                 )
+
+            if truncate and next_prefix.prefixlen > truncate:
+                next_prefix = ipaddr.IPNetwork('%s/%d' % (next_prefix.network, truncate))
+                if debug:
+                    print(
+                        "TRUNCATED: %s (Network: %s, Broadcast: %s to )" % (
+                            next_prefix, next_prefix.network, next_prefix.broadcast
+                        ), file=sys.stderr
+                    )
+
             # Current prefix is larger than next one
             if last_contigous.broadcast >= next_prefix.broadcast:
                 next_id += 1
