@@ -31,7 +31,7 @@ Python 2.7.14+ (default, Apr  2 2018, 04:16:25)
 [GCC 7.3.0] on linux2
 Type "help", "copyright", "credits" or "license" for more information.
 >>>
->>> from aggregate_prefixes.aggregate_prefixes import aggregate_prefixes
+>>> from aggregate_prefixes import aggregate_prefixes
 >>> list(aggregate_prefixes(['192.0.2.0/32', '192.0.2.1/32', '192.0.2.2/32']))
 ['192.0.2.0/31', '192.0.2.2/32']
 >>> 
