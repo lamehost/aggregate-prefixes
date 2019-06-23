@@ -25,24 +25,15 @@
 # SOFTWARE.
 
 
-import uuid
-from setuptools import setup,find_packages
-try: # for pip >= 10
-    from pip._internal.req import parse_requirements
-except ImportError: # for pip <= 9.0.3
-    from pip.req import parse_requirements
 import codecs
+from os.path import abspath, dirname, join
+from setuptools import setup
 
 import aggregate_prefixes as this_package
 
-from os.path import abspath, dirname, join
 here = abspath(dirname(__file__))
-
 with codecs.open(join(here, 'README.md'), encoding='utf-8') as f:
     README = f.read()
-
-install_reqs = parse_requirements('requirements.txt', session=uuid.uuid1())
-reqs = [str(ir.req) for ir in install_reqs]
 
 setup(
     name=this_package.__name__,
@@ -54,7 +45,6 @@ setup(
     version=this_package.__version__,
     packages=[this_package.__name__],
     setup_requires=["nose", "coverage", "mock"],
-    install_requires=reqs,
     include_package_data=True,
     entry_points={
         'console_scripts': [
