@@ -32,7 +32,7 @@ from __future__ import print_function
 
 import sys
 
-import ipaddr
+import ipaddress
 
 
 def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
@@ -61,8 +61,8 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
 
     # Sort and filter prefixes. Smaller network goes firt, on tie larger prefixlen wins
     prefixes = sorted(
-        [p for p in [ipaddr.IPNetwork(p) for p in prefixes] if p.prefixlen <= max_length],
-        key=lambda p: (p.network, p.prefixlen)
+        [p for p in [ipaddress.ip_network(p) for p in prefixes] if p.prefixlen <= max_length],
+        key=lambda p: (p.network_address, p.prefixlen)
     )
     if debug:
         print("PREFIXES: %s\n" % ', '.join([str(_) for _ in prefixes]), file=sys.stderr)
@@ -75,17 +75,17 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
             print ("LOOP START -->\n", file=sys.stderr)
             print(
                 "PREFIX: %s (Network: %s, Broadcast: %s)" % (
-                    prefix, prefix.network, prefix.broadcast
+                    prefix, prefix.network_address, prefix.broadcast_address
                 ), file=sys.stderr
             )
 
         # Truncate
         if truncate and prefix.prefixlen > truncate:
-            prefix = ipaddr.IPNetwork('%s/%d' % (prefix.network, truncate))
+            prefix = ipaddress.ip_network('%s/%d' % (prefix.network_address, truncate))
             if debug:
                 print(
                     "TRUNCATED: %s (Network: %s, Broadcast: %s to )" % (
-                        prefix, prefix.network, prefix.broadcast
+                        prefix, prefix.network_address, prefix.broadcast_address
                     ), file=sys.stderr
                 )
 
@@ -101,25 +101,25 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
             if debug:
                 print(
                     "NEXT: %s (Network: %s, Broadcast: %s)" % (
-                        next_prefix, next_prefix.network, next_prefix.broadcast
+                        next_prefix, next_prefix.network_address, next_prefix.broadcast_address
                     ), file=sys.stderr
                 )
 
             if truncate and next_prefix.prefixlen > truncate:
-                next_prefix = ipaddr.IPNetwork('%s/%d' % (next_prefix.network, truncate))
+                next_prefix = ipaddress.ip_network('%s/%d' % (next_prefix.network_address, truncate))
                 if debug:
                     print(
                         "TRUNCATED: %s (Network: %s, Broadcast: %s to )" % (
-                            next_prefix, next_prefix.network, next_prefix.broadcast
+                            next_prefix, next_prefix.network_address, next_prefix.broadcast_address
                         ), file=sys.stderr
                     )
 
             # Current prefix is larger than next one
-            if last_contigous.broadcast >= next_prefix.broadcast:
+            if last_contigous.broadcast_address >= next_prefix.broadcast_address:
                 next_id += 1
                 continue
             # Next prefix is not contigous, loop ends here
-            if last_contigous.broadcast+1 != next_prefix.network:
+            if last_contigous.broadcast_address+1 != next_prefix.network_address:
                 break
             contigous_prefixes.append(next_prefix)
             next_id += 1
@@ -141,12 +141,12 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
                 )
                 print(
                     "FIRST: %s (Network: %s, Broadcast: %s)" % (
-                        first_contigous, first_contigous.network, first_contigous.broadcast
+                        first_contigous, first_contigous.network_address, first_contigous.broadcast_address
                     ), file=sys.stderr
                 )
                 print(
                     "LAST: %s (Network: %s, Broadcast: %s)" % (
-                        last_contigous, last_contigous.network, last_contigous.broadcast
+                        last_contigous, last_contigous.network_address, last_contigous.broadcast_address
                     ), file=sys.stderr
                 )
             # Assume new aggregate is this contigous
@@ -155,23 +155,23 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
             while tentative_len > 0:
                 tentative_len -= 1
                 # Calculate new tentative prefix
-                tentative = ipaddr.IPNetwork('%s/%d' % (first_contigous.network, tentative_len))
+                tentative = ipaddress.ip_network('%s/%d' % (first_contigous.network_address, tentative_len))
                 if debug:
                     print(
                         "TENTATIVE: %s (Network: %s, Broadcast: %s)" % (
-                            tentative, tentative.network, tentative.broadcast
+                            tentative, tentative.network_address, tentative.broadcast_address
                         ), file=sys.stderr
                     )
                 # Stop loop if bit boundaries are exceeded
-                if tentative.network != first_contigous.network \
-                    or tentative.broadcast > last_contigous.broadcast:
+                if tentative.network_address != first_contigous.network_address \
+                    or tentative.broadcast_address > last_contigous.broadcast_address:
                     break
                 aggregate = tentative
             # Found a new aggregate
             if debug:
                 print(
                     "AGGREGATE: %s (Network: %s, Broadcast: %s)" % (
-                        aggregate, aggregate.network, aggregate.broadcast
+                        aggregate, aggregate.network_address, aggregate.broadcast_address
                     ), file=sys.stderr
                 )
             # Find how many contigous the aggregate spans
@@ -181,11 +181,11 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
                     print(
                         "TESTING: %s (Network: %s, Broadcast: %s)" % (
                             contigous_prefixes[covered_id],
-                            contigous_prefixes[covered_id].network,
-                            contigous_prefixes[covered_id].broadcast
+                            contigous_prefixes[covered_id].network_address,
+                            contigous_prefixes[covered_id].broadcast_address
                         ), file=sys.stderr
                     )
-                if aggregate.broadcast < contigous_prefixes[covered_id].network:
+                if aggregate.broadcast_address < contigous_prefixes[covered_id].network_address:
                     break
                 covered_id += 1
             if debug:
@@ -196,7 +196,7 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
                 )
             contigous_id = covered_id
 
-            yield '%s/%d' % (aggregate.network, aggregate.prefixlen)
+            yield '%s/%d' % (aggregate.network_address, aggregate.prefixlen)
 
         if debug:
             print("<-- LOOP END", file=sys.stderr)
