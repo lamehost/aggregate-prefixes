@@ -80,7 +80,7 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
 
         # Truncate
         if truncate and prefix.prefixlen > truncate:
-            prefix = ipaddress.ip_network('%s/%d' % (prefix.network_address, truncate))
+            prefix = ipaddress.ip_network('%s/%d' % (prefix.network_address, truncate), False)
             if debug:
                 print(
                     "TRUNCATED: %s (Network: %s, Broadcast: %s to )" % (
@@ -105,7 +105,7 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
                 )
 
             if truncate and next_prefix.prefixlen > truncate:
-                next_prefix = ipaddress.ip_network('%s/%d' % (next_prefix.network_address, truncate))
+                next_prefix = ipaddress.ip_network('%s/%d' % (next_prefix.network_address, truncate), False)
                 if debug:
                     print(
                         "TRUNCATED: %s (Network: %s, Broadcast: %s to )" % (
