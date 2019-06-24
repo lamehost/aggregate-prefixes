@@ -23,6 +23,9 @@
 # SOFTWARE.
 
 
+"""Provide version info to the package"""
+
+
 __version__ = "0.6.1"
 __author__ = "Marco Marzetti"
 __author_email__ = "marco@lamehost.it"
