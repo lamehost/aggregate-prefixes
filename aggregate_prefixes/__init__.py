@@ -41,8 +41,8 @@ Example:
 
 from __future__ import absolute_import
 
-from aggregate_prefixes.aggregate_prefixes import aggregate_prefixes
-from aggregate_prefixes.__about__ import (
+from .aggregate_prefixes import aggregate_prefixes
+from .__about__ import (
     __version__,
     __author__,
     __author_email__,

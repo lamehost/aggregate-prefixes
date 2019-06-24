@@ -29,11 +29,12 @@ Provides CLI interface for package aggregate-prefixes
 
 from __future__ import absolute_import
 from __future__ import print_function
+from __future__ import unicode_literals
 import argparse
 import sys
 
 from aggregate_prefixes import aggregate_prefixes
-from aggregate_prefixes import __version__ as VERSION
+from .__about__ import __version__ as VERSION
 
 def main():
     """
@@ -88,10 +89,6 @@ def main():
         # Skip empty strings
         if p
     ]
-
-    if sys.version_info.major == 2:
-        # Handle str to unicode conversion in python2
-        prefixes = [unicode(p) for p in prefixes]
 
     try:
         aggregates = aggregate_prefixes(prefixes, args.max_length, args.truncate, args.verbose)
