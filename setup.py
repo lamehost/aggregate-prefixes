@@ -57,7 +57,7 @@ setup(
     include_package_data=True,
     entry_points={
         'console_scripts': [
-            'aggregate-prefixes = aggregate_prefixes.cli:main',
+            'aggregate-prefixes = aggregate_prefixes.__main__:main',
         ],
     },
     long_description=README,
