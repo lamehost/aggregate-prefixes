@@ -26,25 +26,31 @@
 
 
 import codecs
+import sys
+
+from collections import namedtuple
 from os.path import abspath, dirname, join
 from setuptools import setup
 
-import aggregate_prefixes as this_package
+about = dict()
+with open("aggregate_prefixes/__about__.py") as _:
+    exec(_.read(), about)
 
 here = abspath(dirname(__file__))
 with codecs.open(join(here, 'README.md'), encoding='utf-8') as f:
     README = f.read()
 
 setup(
-    name=this_package.__name__,
-    author=this_package.__author__,
-    author_email=this_package.__author_email__,
-    description=this_package.__description__,
-    license=this_package.__license__,
-    url=this_package.__url__,
-    version=this_package.__version__,
-    packages=[this_package.__name__],
+    name='aggregate_prefixes',
+    author=about['__author__'],
+    author_email=about['__author_email__'],
+    description=about['__description__'],
+    license=about['__license__'],
+    url=about['__url__'],
+    version=about['__version__'],
+    packages=['aggregate_prefixes'],
     setup_requires=["nose", "coverage", "mock"],
+    install_requires=["ipaddress"] if sys.version_info.major == 2 else [],
     include_package_data=True,
     entry_points={
         'console_scripts': [
