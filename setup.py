@@ -25,29 +25,32 @@
 # SOFTWARE.
 
 
+"""Install package"""
+
+
 import codecs
 import sys
 
-from collections import namedtuple
 from os.path import abspath, dirname, join
 from setuptools import setup
 
-about = dict()
-with open("aggregate_prefixes/__about__.py") as _:
-    exec(_.read(), about)
 
-here = abspath(dirname(__file__))
-with codecs.open(join(here, 'README.md'), encoding='utf-8') as f:
+ABOUT = dict()
+with open("aggregate_prefixes/__about__.py") as _:
+    exec(_.read(), ABOUT)
+
+HERE = abspath(dirname(__file__))
+with codecs.open(join(HERE, 'README.md'), encoding='utf-8') as f:
     README = f.read()
 
 setup(
     name='aggregate_prefixes',
-    author=about['__author__'],
-    author_email=about['__author_email__'],
-    description=about['__description__'],
-    license=about['__license__'],
-    url=about['__url__'],
-    version=about['__version__'],
+    author=ABOUT['__author__'],
+    author_email=ABOUT['__author_email__'],
+    description=ABOUT['__description__'],
+    license=ABOUT['__license__'],
+    url=ABOUT['__url__'],
+    version=ABOUT['__version__'],
     packages=['aggregate_prefixes'],
     setup_requires=["nose", "coverage", "mock"],
     install_requires=["ipaddress"] if sys.version_info.major == 2 else [],
