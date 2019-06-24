@@ -59,8 +59,11 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
     """
 
     # Sort and filter prefixes. Smaller network goes firt, on tie larger prefixlen wins
-    prefixes = sorted(
-        [p for p in [ipaddress.ip_network(p) for p in prefixes] if p.prefixlen <= max_length],
+    prefixes = sorted([
+            p for p in
+            [ipaddress.ip_network(p, False) for p in prefixes]
+            if p.prefixlen <= max_length
+        ],
         key=lambda p: (p.network_address, p.prefixlen)
     )
     if debug:
@@ -161,7 +164,7 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
                 tentative_len -= 1
                 # Calculate new tentative prefix
                 tentative = ipaddress.ip_network(
-                    '%s/%d' % (first_contigous.network_address, tentative_len)
+                    '%s/%d' % (first_contigous.network_address, tentative_len), False
                 )
                 if debug:
                     print(
