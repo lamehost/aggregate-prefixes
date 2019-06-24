@@ -14,7 +14,7 @@ import unittest
 from mock import patch
 
 from aggregate_prefixes import aggregate_prefixes
-from aggregate_prefixes.cli import main as cli_main
+from aggregate_prefixes.__main__ import main as cli_main
 
 
 def stub_stdin(testcase_inst, inputs):
