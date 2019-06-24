@@ -59,7 +59,8 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
     """
 
     # Sort and filter prefixes. Smaller network goes firt, on tie larger prefixlen wins
-    prefixes = sorted([
+    prefixes = sorted(
+        [
             p for p in
             [ipaddress.ip_network(p, False) for p in prefixes]
             if p.prefixlen <= max_length
@@ -74,7 +75,7 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
     while _id < total_prefixes:
         prefix = prefixes[_id]
         if debug:
-            print ("LOOP START -->\n", file=sys.stderr)
+            print("LOOP START -->\n", file=sys.stderr)
             print(
                 "PREFIX: %s (Network: %s, Broadcast: %s)" % (
                     prefix, prefix.network_address, prefix.broadcast_address
