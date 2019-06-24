@@ -84,12 +84,17 @@ def main():
     # Read and cleanup prefixes
     prefixes = [
         p for p in set([
-            # Read lines in split those after whitespaces, skip comments and return the rest
+            # Read lines, split those after whitespaces, skip comments and return the rest
             p.strip() for line in args.prefixes for p in line.split(' ') if not p.startswith('#')
         ])
         # Skip empty strings
         if p
     ]
+
+    if sys.version_info.major == 2:
+        # Handle str to unicode conversion in python2
+        prefixes = [unicode(p) for p in prefixes]
+
     try:
         aggregates = aggregate_prefixes(prefixes, args.max_length, args.truncate, args.verbose)
     except (ValueError, TypeError) as error:
