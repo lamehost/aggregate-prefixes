@@ -55,19 +55,15 @@ def main():
     )
     parser.add_argument(
         '--max-length', '-m',
-        nargs='?',
         metavar='LENGTH',
         type=int,
         help='Discard longer prefixes prior to processing',
-        default=128
     )
     parser.add_argument(
         '--truncate', '-t',
-        nargs='?',
         metavar='MASK',
         type=int,
-        help='Ttruncate IP/mask to network/mask',
-        default=128
+        help='Truncate IP/mask to network/mask',
     )
     parser.add_argument(
         '--verbose', '-v',
