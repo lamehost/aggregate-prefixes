@@ -58,12 +58,14 @@ def main():
         metavar='LENGTH',
         type=int,
         help='Discard longer prefixes prior to processing',
+        default=128
     )
     parser.add_argument(
         '--truncate', '-t',
         metavar='MASK',
         type=int,
         help='Truncate IP/mask to network/mask',
+        default=128
     )
     parser.add_argument(
         '--verbose', '-v',
