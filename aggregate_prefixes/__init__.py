@@ -51,4 +51,3 @@ from aggregate_prefixes.__about__ import (
     __license__,
     __classifiers__
 )
-
