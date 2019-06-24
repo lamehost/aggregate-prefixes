@@ -40,20 +40,15 @@ Example:
 
 
 from __future__ import absolute_import
+
 from aggregate_prefixes.aggregate_prefixes import aggregate_prefixes
+from aggregate_prefixes.__about__ import (
+    __version__,
+    __author__,
+    __author_email__,
+    __url__,
+    __description__,
+    __license__,
+    __classifiers__
+)
 
-
-__version__ = "0.6.1"
-__author__ = "Marco Marzetti"
-__author_email__ = "marco@lamehost.it"
-__url__ = "https://github.com/lamehost/aggregate-prefixes/"
-__description__ = "Fast IPv4 and IPv6 prefix aggregator written in Python."
-__license__ = "MIT"
-__classifiers__ = [
-    'Intended Audience :: Developers',
-    'Topic :: Software Development :: Libraries :: Python Modules',
-    'Topic :: System :: Networking',
-    'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 2.7',
-    'Programming Language :: Python :: 3.6'
-]
