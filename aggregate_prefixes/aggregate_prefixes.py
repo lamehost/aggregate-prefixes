@@ -105,7 +105,9 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
                 )
 
             if truncate and next_prefix.prefixlen > truncate:
-                next_prefix = ipaddress.ip_network('%s/%d' % (next_prefix.network_address, truncate), False)
+                next_prefix = ipaddress.ip_network(
+                    '%s/%d' % (next_prefix.network_address, truncate), False
+                )
                 if debug:
                     print(
                         "TRUNCATED: %s (Network: %s, Broadcast: %s to )" % (
@@ -140,12 +142,16 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
                 )
                 print(
                     "FIRST: %s (Network: %s, Broadcast: %s)" % (
-                        first_contigous, first_contigous.network_address, first_contigous.broadcast_address
+                        first_contigous,
+                        first_contigous.network_address,
+                        first_contigous.broadcast_address
                     ), file=sys.stderr
                 )
                 print(
                     "LAST: %s (Network: %s, Broadcast: %s)" % (
-                        last_contigous, last_contigous.network_address, last_contigous.broadcast_address
+                        last_contigous,
+                        last_contigous.network_address,
+                        last_contigous.broadcast_address
                     ), file=sys.stderr
                 )
             # Assume new aggregate is this contigous
@@ -154,7 +160,9 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
             while tentative_len > 0:
                 tentative_len -= 1
                 # Calculate new tentative prefix
-                tentative = ipaddress.ip_network('%s/%d' % (first_contigous.network_address, tentative_len))
+                tentative = ipaddress.ip_network(
+                    '%s/%d' % (first_contigous.network_address, tentative_len)
+                )
                 if debug:
                     print(
                         "TENTATIVE: %s (Network: %s, Broadcast: %s)" % (
