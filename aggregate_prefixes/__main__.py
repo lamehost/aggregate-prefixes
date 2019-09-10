@@ -51,6 +51,7 @@ def main():
     parser.add_argument(
         'prefixes',
         type=argparse.FileType('r'),
+        nargs='?',
         help='Text file of unsorted list of IPv4 or IPv6 prefixes. Use \'-\' for STDIN.',
         default=sys.stdin
     )
