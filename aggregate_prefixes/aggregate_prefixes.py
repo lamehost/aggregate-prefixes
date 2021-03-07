@@ -59,14 +59,13 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
     """
 
     # Sort and filter prefixes. Smaller network goes firt, on tie larger prefixlen wins
-    prefixes = sorted(
-        [
-            p for p in
-            [ipaddress.ip_network(p, False) for p in prefixes]
-            if p.prefixlen <= max_length
-        ],
-        key=lambda p: (p.network_address, p.prefixlen)
-    )
+    prefixes = [
+        p for p in
+        [ipaddress.ip_network(p, False) for p in prefixes]
+        if p.prefixlen <= max_length
+    ]
+    prefixes.sort(key=lambda p: (p.network_address, p.prefixlen))
+
     if debug:
         print("PREFIXES: %s\n" % ', '.join([str(_) for _ in prefixes]), file=sys.stderr)
 
