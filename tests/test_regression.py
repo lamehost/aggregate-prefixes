@@ -11,7 +11,7 @@ import io
 import sys
 import unittest
 
-from mock import patch
+from unittest.mock import patch
 
 from aggregate_prefixes import aggregate_prefixes
 from aggregate_prefixes.__main__ import main as cli_main
