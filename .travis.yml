@@ -1,7 +1,6 @@
 language: python
 
 python:
-  - "pypy"
   - "3.6"
   - "3.8"
   - "3.9"
@@ -10,6 +9,6 @@ install:
   - pip install nose
 
 script:
-  - python setup.py install
-  - python setup.py nosetests
+  - python3 setup.py install
+  - python3 setup.py nosetests
 
