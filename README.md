@@ -29,8 +29,8 @@ optional arguments:
 # Usage as module
 ```
 $ python
-Python 2.7.14+ (default, Apr  2 2018, 04:16:25) 
-[GCC 7.3.0] on linux2
+Python 3.9.1+ (default, Feb  5 2021, 13:46:56) 
+[GCC 10.2.1 20210110] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>>
 >>> from aggregate_prefixes import aggregate_prefixes
@@ -41,5 +41,5 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 # Python compatibility
 Tested with:
- - Python 2.7.15
  - Python 3.6.5
+ - Python 3.9.1+
