@@ -41,5 +41,4 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 # Python compatibility
 Tested with:
- - Python 3.6.5
  - Python 3.9.1+

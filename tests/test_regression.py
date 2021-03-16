@@ -9,6 +9,7 @@ from __future__ import absolute_import
 
 import io
 import sys
+import ipaddress
 import unittest
 
 from unittest.mock import patch
@@ -47,12 +48,12 @@ class TestAggregatePrefixes(unittest.TestCase):
     def test_00__default_wins(self):
         """Test if default covers all the other prefixes"""
         self.assertEqual(list(aggregate_prefixes([u"0.0.0.0/0", u"10.0.0.0/16"])),
-                         [u"0.0.0.0/0"])
+                         [ipaddress.ip_network("0.0.0.0/0")])
 
     def test_01__join_two(self):
         """Test if contigous prefixes get aggregated"""
         self.assertEqual(list(aggregate_prefixes([u"10.0.0.0/8", u"11.0.0.0/8"])),
-                         [u"10.0.0.0/7"])
+                         [ipaddress.ip_network("10.0.0.0/7")])
 
     def test_02__mix_v4_v6_default(self):
         """Test if error is raised when mixing IPv4 and IPv6"""
@@ -65,21 +66,29 @@ class TestAggregatePrefixes(unittest.TestCase):
         pfxs = []
         for i in range(0, 256):
             pfxs.append(u"{}.0.0.0/8".format(i))
-        self.assertEqual(list(aggregate_prefixes(pfxs)), [u"0.0.0.0/0"])
+        self.assertEqual(list(aggregate_prefixes(pfxs)), [ipaddress.ip_network("0.0.0.0/0")])
 
     def test_04__lot_of_ipv4_holes(self):
         """Test if non contigous IPv4 prefixes are handled correctly"""
         pfxs = []
         for i in range(5, 200):
             pfxs.append(u"{}.0.0.0/8".format(i))
-        outcome = [u"5.0.0.0/8", u"6.0.0.0/7", u"8.0.0.0/5", u"16.0.0.0/4",
-                   u"32.0.0.0/3", u"64.0.0.0/2", u"128.0.0.0/2", u"192.0.0.0/5"]
+        outcome = [
+            ipaddress.ip_network("5.0.0.0/8"),
+            ipaddress.ip_network("6.0.0.0/7"),
+            ipaddress.ip_network("8.0.0.0/5"),
+            ipaddress.ip_network("16.0.0.0/4"),
+            ipaddress.ip_network("32.0.0.0/3"),
+            ipaddress.ip_network("64.0.0.0/2"),
+            ipaddress.ip_network("128.0.0.0/2"),
+            ipaddress.ip_network("192.0.0.0/5")
+        ]
         self.assertEqual(list(aggregate_prefixes(pfxs)), outcome)
 
     def test_05__reduce_dups(self):
         """Test if duplicates are removed"""
         self.assertEqual(list(aggregate_prefixes([u"2001:db8::/32", u"2001:db8::/32"])),
-                         [u"2001:db8::/32"])
+                         [ipaddress.ip_network("2001:db8::/32")])
 
     def test_06__non_ip_input(self):
         """Test if error is raised with non IP input"""

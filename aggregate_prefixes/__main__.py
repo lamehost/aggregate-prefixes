@@ -82,20 +82,32 @@ def main():
     args = parser.parse_args()
 
     # Read and cleanup prefixes
-    prefixes = [
-        p for p in set([
-            # Read lines, split those after whitespaces, skip comments and return the rest
-            p.strip() for line in args.prefixes for p in line.split(' ') if not p.startswith('#')
-        ])
-        # Skip empty strings
-        if p
-    ]
+    prefixes = {
+            prefix
+            # Walk through lines
+            for line in args.prefixes
+            if (
+                # Skip comments and strip lines
+                prefixes:= next(iter(
+                    line.split('#')
+                )).strip()
+            )
+            # Skip empty lines
+            and prefixes
+            # Multiple prefixes per line separated by space are supported
+            for prefix in prefixes.split(' ')
+    }
 
     try:
+        # Aggregate
         aggregates = aggregate_prefixes(prefixes, args.max_length, args.truncate, args.verbose)
     except (ValueError, TypeError) as error:
         sys.exit('ERROR: %s' % error)
-    print('\n'.join(aggregates))
+
+    # Print aggregates one per line
+    print(
+        '\n'.join(map(str, aggregates))
+    )
 
 
 if __name__ == '__main__':
