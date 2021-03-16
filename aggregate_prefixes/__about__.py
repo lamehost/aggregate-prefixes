@@ -37,5 +37,6 @@ __classifiers__ = [
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: System :: Networking',
     'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 3.9.1+'
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9'
 ]
