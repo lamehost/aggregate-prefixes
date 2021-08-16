@@ -155,11 +155,12 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
     """
 
     # Translate prefixes into a parsable data structure and discard those that exceed maxlen
-    prefixes = [
-        prefix
-        for text in prefixes
-        if (prefix := ipaddress.ip_network(text, False)) and prefix.prefixlen <= max_length
-    ]
+    filtered_prefixes = []
+    for prefix in prefixes:
+        prefix = ipaddress.ip_network(prefix, False)
+        if prefix.prefixlen <= max_length:
+            filtered_prefixes.append(prefix)
+    prefixes = filtered_prefixes
 
     # Apply truncate
     if truncate:

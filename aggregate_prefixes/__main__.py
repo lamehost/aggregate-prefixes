@@ -82,21 +82,11 @@ def main():
     args = parser.parse_args()
 
     # Read and cleanup prefixes
-    prefixes = {
-            prefix
-            # Walk through lines
-            for line in args.prefixes
-            if (
-                # Skip comments and strip lines
-                prefixes:= next(iter(
-                    line.split('#')
-                )).strip()
-            )
-            # Skip empty lines
-            and prefixes
-            # Multiple prefixes per line separated by space are supported
-            for prefix in prefixes.split(' ')
-    }
+    prefixes = []
+    for line in args.prefixes:
+        text = next(iter(line.split('#'))).strip()
+        if text:
+          prefixes += text.split(' ')
 
     try:
         # Aggregate
