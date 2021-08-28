@@ -86,7 +86,7 @@ def main():
     for line in args.prefixes:
         text = next(iter(line.split('#'))).strip()
         if text:
-          prefixes += text.split(' ')
+            prefixes += text.split(' ')
 
     try:
         # Aggregate
