@@ -27,16 +27,15 @@
 Provides CLI interface for package aggregate-prefixes
 """
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
 import argparse
+import logging
 import sys
 
 from aggregate_prefixes import aggregate_prefixes
 from .__about__ import __version__ as VERSION
 
-def main():
+
+def main() -> None:
     """
     Aggregates IPv4 or IPv6 prefixes from file or STDIN.
 
@@ -88,13 +87,20 @@ def main():
         if text:
             prefixes += text.split(' ')
 
+    # Activate verbose logging
+    if args.verbose:
+        logging.basicConfig()
+        logger = logging.getLogger('aggregate_prefixes')
+        logger.propagate = True
+        logger.setLevel(logging.DEBUG)
+
     try:
         # Aggregate
-        aggregates = aggregate_prefixes(prefixes, args.max_length, args.truncate, args.verbose)
+        aggregates = aggregate_prefixes(prefixes, args.max_length, args.truncate)
     except (ValueError, TypeError) as error:
-        sys.exit('ERROR: %s' % error)
+        sys.exit(f'ERROR: {error}')
 
-    # Print aggregates one per line
+    # Cast aggregates to `str` and print one per line
     print(
         '\n'.join(map(str, aggregates))
     )

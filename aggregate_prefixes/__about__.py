@@ -26,7 +26,7 @@
 """Provide version info to the package"""
 
 
-__version__ = "0.6.4"
+__version__ = "0.6.5"
 __author__ = "Marco Marzetti"
 __author_email__ = "marco@lamehost.it"
 __url__ = "https://github.com/lamehost/aggregate-prefixes/"
@@ -37,6 +37,8 @@ __classifiers__ = [
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: System :: Networking',
     'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 3.7',
     'Programming Language :: Python :: 3.8',
-    'Programming Language :: Python :: 3.9'
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10'
 ]

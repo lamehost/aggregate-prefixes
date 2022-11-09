@@ -38,9 +38,6 @@ Example:
 	>>>
 """
 
-
-from __future__ import absolute_import
-
 from .aggregate_prefixes import aggregate_prefixes
 from .__about__ import (
     __version__,

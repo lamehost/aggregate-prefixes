@@ -28,23 +28,28 @@ Provides core functions for package aggregate-prefixes
 """
 
 
-import sys
-import ipaddress
+from ipaddress import IPv4Network, IPv6Network, ip_network
+import logging
+from typing import Union, List, Iterator
 
 
-def find_aggregatables(prefixes):
+LOGGER = logging.getLogger(__name__)
+
+
+def find_aggregatables(prefixes: List[Union[IPv4Network, IPv6Network]]) -> Iterator:
     """
     Split prefix lists into aggregatable chunks
 
     Parameters:
     -----------
-    prefixes : list
-        Sorted list of IPv4 or IPv6 prefixes serialized as ipaddr objects
+    prefixes: list
+        Sorted list of IPv4 or IPv6 prefixes serialized as either IPv4Network or IPv6Network
 
     Returns
     -------
-    generator
-        Iterable made of sorted list of aggregatable IPv4 or IPv6 prefixes serialized as ipaddress
+    generator:
+        Iterable made of sorted list of aggregatable IPv4 or IPv6 prefixes serialized as either
+        IPv4Network or IPv6Network
     """
     # Add first item to a chunk
     try:
@@ -72,23 +77,24 @@ def find_aggregatables(prefixes):
     yield aggregatable
 
 
-
-def aggregate_aggregatable(aggregatable, debug=False):
+def aggregate_aggregatable(
+    aggregatable: List[Union[IPv4Network, IPv6Network]]
+) -> Iterator[Union[IPv4Network, IPv6Network]]:
     """
     Aggregates aggregatable chunks
 
     Parameters:
     -----------
     aggregatable : list
-        Sorted list of aggregatable IPv4 or IPv6 prefixes serialized as ipaddress
+        Sorted list of aggregatable IPv4 or IPv6 prefixes serialized as either IPv4Network or
+        IPv6Network
 
     Returns
     -------
-    generator
-        Aggregates serialized as ipaddress
+    generator:
+        Aggregates serialized as either IPv4Network or IPv6Network
     """
-    if debug:
-        sys.stderr.write('Aggregatables: %s\n' % ', '.join(map(str, aggregatable)))
+    LOGGER.debug('Aggregatables: %s',  ', '.join(map(str, aggregatable)))
     aggregatable_end = aggregatable[-1].broadcast_address
 
     # Assume first item is an agggregte
@@ -101,24 +107,20 @@ def aggregate_aggregatable(aggregatable, debug=False):
     for prefix in aggregatable:
         # Skip prefixes that are part of the current aggregate
         if aggregate_end and aggregate_end >= prefix.broadcast_address:
-            if debug:
-                sys.stderr.write('  Skipping: %s\n' % prefix)
+            LOGGER.debug('  Skipping: %s', prefix)
             continue
-        if debug:
-            sys.stderr.write(' Prefix: %s\n' % prefix)
+        LOGGER.debug(' Prefix: %s', prefix)
 
         # Iteratively reduce aggregate length
         for tentative_len in range(prefix.prefixlen, -1, -1):
-            tentative = ipaddress.ip_network(
-                '%s/%d' % (prefix.network_address, tentative_len), False
+            tentative = ip_network(
+                f'{prefix.network_address}/{tentative_len}', False
             )
-            if debug:
-                sys.stderr.write('  Tentative aggregate: %s\n' % tentative)
+            LOGGER.debug('  Tentative aggregate: %s', tentative)
             # If boundaries are exceeded, then exit the loop
             if prefix.network_address != tentative.network_address or \
                 tentative.broadcast_address > aggregatable_end:
-                if debug:
-                    sys.stderr.write('  Boundaries exceeded by netmask: /%d\n' % tentative_len)
+                LOGGER.debug('  Boundaries exceeded by netmask: /%d', tentative_len)
                 break
 
             # At the end of every loop, consider the update aggregate to current length
@@ -126,12 +128,15 @@ def aggregate_aggregatable(aggregatable, debug=False):
             aggregate_end = aggregate.broadcast_address
 
         # Return aggregate
-        if debug:
-            sys.stderr.write(' Aggregate found: %s\n' % aggregate)
+        LOGGER.debug(' Aggregate found: %s', aggregate)
         yield aggregate
 
 
-def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
+def aggregate_prefixes(
+    prefixes: List[Union[str, IPv4Network, IPv6Network]],
+    max_length: int = 128,
+    truncate: int = False,
+) -> Iterator[Union[IPv4Network, IPv6Network]]:
     """
     Aggregates IPv4 or IPv6 prefixes.
 
@@ -140,24 +145,24 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
     Parameters
     ----------
     prefixes : list
-        Unsorted list of IPv4 or IPv6 prefixes serialized as strings or ipaddr objects
+        Unsorted list of IPv4 or IPv6 prefixes serialized as either string, IPv4Network or
+        IPv6Network
     max_length: int
         Discard longer prefixes prior to processing
-    truncate:
+    truncate: int
         Truncate IP/mask to network/mask
-    debug: bool
-        Write debug information on STDOUT
 
     Returns
     -------
     generator
-        Sorted iterable of IPv4 or IPv6 aggregated prefixes serialized as strings
+        Sorted iterable of IPv4 or IPv6 aggregated prefixes serialized as either IPv4Network
+        or IPv6Network
     """
 
     # Translate prefixes into a parsable data structure and discard those that exceed maxlen
     filtered_prefixes = []
     for prefix in prefixes:
-        prefix = ipaddress.ip_network(prefix, False)
+        prefix = ip_network(prefix, False)
         if prefix.prefixlen <= max_length:
             filtered_prefixes.append(prefix)
     prefixes = filtered_prefixes
@@ -165,7 +170,7 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
     # Apply truncate
     if truncate:
         prefixes = [
-            ipaddress.ip_network('%s/%d' % (prefix.network_address, truncate), False)
+            ip_network(f'{prefix.network_address}/{truncate}', False)
             if prefix.prefixlen > truncate
             else prefix
             for prefix in prefixes
@@ -179,4 +184,4 @@ def aggregate_prefixes(prefixes, max_length=128, truncate=False, debug=False):
 
     # Aggregate aggregatables
     for aggregatable in aggregatables:
-        yield from aggregate_aggregatable(aggregatable, debug)
+        yield from aggregate_aggregatable(aggregatable)
