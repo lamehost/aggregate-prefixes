@@ -30,9 +30,34 @@ Provides CLI interface for package aggregate-prefixes
 import argparse
 import logging
 import sys
+from typing import Union
+from ipaddress import IPv4Network, IPv6Network
 
 from aggregate_prefixes import aggregate_prefixes
 from .__about__ import __version__ as VERSION
+
+
+def strip_host_mask(prefix: Union[IPv4Network, IPv6Network]) -> str:
+    """
+    Prefix formatting function.
+    Removes netmask if prefix is a host route (/32 IPv4 or /128 IPv6)
+
+    Arguments:
+    ----------
+    prefix: Union[IPv4Network, IPv6Network]
+        Prefix to be formatted
+
+    Returns:
+    --------
+    str: Formatted prefix
+    """
+    if (
+        (prefix.version == 4 and prefix.prefixlen == 32) or
+        (prefix.version == 6 and prefix.prefixlen == 128)
+    ):
+        return str(prefix.network_address)
+
+    return str(prefix)
 
 
 def main() -> None:
@@ -60,6 +85,13 @@ def main() -> None:
         type=int,
         help='Discard longer prefixes prior to processing',
         default=128
+    )
+    parser.add_argument(
+        '--strip-host-mask', '-s',
+        dest='strip_host_mask',
+        help="Do not print netmask if prefix is a host route (/32 IPv4, /128 IPv6)",
+        action='store_true',
+        default=False
     )
     parser.add_argument(
         '--truncate', '-t',
@@ -100,9 +132,15 @@ def main() -> None:
     except (ValueError, TypeError) as error:
         sys.exit(f'ERROR: {error}')
 
-    # Cast aggregates to `str` and print one per line
+    # Define output formatting function
+    if args.strip_host_mask:
+        formatting_function = strip_host_mask
+    else:
+        formatting_function = str
+
+    # Process aggregates and print one per line
     print(
-        '\n'.join(map(str, aggregates))
+        '\n'.join(map(formatting_function, aggregates))
     )
 
 

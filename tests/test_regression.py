@@ -124,6 +124,14 @@ class TestAggregatePrefixes(unittest.TestCase):
             cli_main()
         self.assertEqual(sys.stdout.getvalue(), u'10.0.0.0/30\n')
 
+    def test_10__no_host_mask(self):
+        """Test if truncate is handled correctly"""
+        stub_stdin(self, u'10.0.0.1/32\n10.0.0.2/32\n10.0.0.3/32\n')
+        stub_stdouts(self)
+        with patch.object(sys, 'argv', ["prog.py", "-s", "-"]):
+            cli_main()
+        self.assertEqual(sys.stdout.getvalue(), u'10.0.0.1\n10.0.0.2/31\n')
+
 
 class StringIO(io.StringIO):
     """A "safely" wrapped version of StringIO"""
