@@ -69,6 +69,12 @@ def main() -> None:
         default=128
     )
     parser.add_argument(
+        '--no-single-mask', '-n',
+        dest='no_single_mask',
+        help="Don't add CIDR mask for individual IPs (/32, /128)",
+        action='store_true'
+    )
+    parser.add_argument(
         '--verbose', '-v',
         help='Display verbose information about the optimisations',
         action='store_true'
@@ -100,9 +106,18 @@ def main() -> None:
     except (ValueError, TypeError) as error:
         sys.exit(f'ERROR: {error}')
 
-    # Cast aggregates to `str` and print one per line
+    def prepare_output(prefix):
+        if args.no_single_mask:
+            if (prefix.version == 4 and prefix.prefixlen == 32) or (prefix.version == 6 and prefix.prefixlen == 128):
+                return(str(prefix).split('/')[0])
+            else:
+                return(str(prefix))
+        else:
+            return(str(prefix))
+
+    # Process aggregates and print one per line
     print(
-        '\n'.join(map(str, aggregates))
+        '\n'.join(map(prepare_output, aggregates))
     )
 
 
