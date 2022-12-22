@@ -11,8 +11,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -36,20 +36,23 @@ from typing import Union, List, Iterator
 LOGGER = logging.getLogger(__name__)
 
 
-def find_aggregatables(prefixes: List[Union[IPv4Network, IPv6Network]]) -> Iterator:
+def find_aggregatables(
+    prefixes: List[Union[IPv4Network, IPv6Network]]
+) -> Iterator:
     """
     Split prefix lists into aggregatable chunks
 
     Parameters:
     -----------
     prefixes: list
-        Sorted list of IPv4 or IPv6 prefixes serialized as either IPv4Network or IPv6Network
+        Sorted list of IPv4 or IPv6 prefixes serialized as either IPv4Network
+        or IPv6Network
 
     Returns
     -------
     generator:
-        Iterable made of sorted list of aggregatable IPv4 or IPv6 prefixes serialized as either
-        IPv4Network or IPv6Network
+        Iterable made of sorted list of aggregatable IPv4 or IPv6 prefixes
+        serialized as either IPv4Network or IPv6Network
     """
     # Add first item to a chunk
     try:
@@ -63,10 +66,12 @@ def find_aggregatables(prefixes: List[Union[IPv4Network, IPv6Network]]) -> Itera
 
     # Walk over prefixes
     for prefix in prefixes[1:]:
-        # If network is smaller than broadcast, then prefix is subnetwork of current chunk member
+        # If network is smaller than broadcast, then prefix is subnetwork of
+        # current chunk member
         if prefix.network_address <= broadcast:
             continue
-        # If network starts right after broadcast, then prefixes might be aggreagatable
+        # If network starts right after broadcast, then prefixes might be
+        # aggreagatable
         if broadcast + 1 == prefix.network_address:
             aggregatable.append(prefix)
         # Else, just save current and start a new chunk
@@ -86,8 +91,8 @@ def aggregate_aggregatable(
     Parameters:
     -----------
     aggregatable : list
-        Sorted list of aggregatable IPv4 or IPv6 prefixes serialized as either IPv4Network or
-        IPv6Network
+        Sorted list of aggregatable IPv4 or IPv6 prefixes serialized as either
+        IPv4Network or IPv6Network
 
     Returns
     -------
@@ -118,12 +123,17 @@ def aggregate_aggregatable(
             )
             LOGGER.debug('  Tentative aggregate: %s', tentative)
             # If boundaries are exceeded, then exit the loop
-            if prefix.network_address != tentative.network_address or \
-                tentative.broadcast_address > aggregatable_end:
-                LOGGER.debug('  Boundaries exceeded by netmask: /%d', tentative_len)
+            if (
+                prefix.network_address != tentative.network_address or
+                tentative.broadcast_address > aggregatable_end
+            ):
+                LOGGER.debug(
+                    '  Boundaries exceeded by netmask: /%d', tentative_len
+                )
                 break
 
-            # At the end of every loop, consider the update aggregate to current length
+            # At the end of every loop, consider the update aggregate to
+            # current length
             aggregate = tentative
             aggregate_end = aggregate.broadcast_address
 
@@ -140,13 +150,14 @@ def aggregate_prefixes(
     """
     Aggregates IPv4 or IPv6 prefixes.
 
-    Gets a list of unsorted IPv4 or IPv6 prefixes and returns a sorted iterable of aggregates.
+    Gets a list of unsorted IPv4 or IPv6 prefixes and returns a sorted iterable
+    of aggregates.
 
     Parameters
     ----------
     prefixes : list
-        Unsorted list of IPv4 or IPv6 prefixes serialized as either string, IPv4Network or
-        IPv6Network
+        Unsorted list of IPv4 or IPv6 prefixes serialized as either string,
+        IPv4Network or IPv6Network
     max_length: int
         Discard longer prefixes prior to processing
     truncate: int
@@ -155,11 +166,12 @@ def aggregate_prefixes(
     Returns
     -------
     generator
-        Sorted iterable of IPv4 or IPv6 aggregated prefixes serialized as either IPv4Network
-        or IPv6Network
+        Sorted iterable of IPv4 or IPv6 aggregated prefixes serialized as
+        either IPv4Network or IPv6Network
     """
 
-    # Translate prefixes into a parsable data structure and discard those that exceed maxlen
+    # Translate prefixes into a parsable data structure and discard those that
+    # exceed maxlen
     filtered_prefixes = []
     for prefix in prefixes:
         prefix = ip_network(prefix, False)
@@ -176,7 +188,8 @@ def aggregate_prefixes(
             for prefix in prefixes
         ]
 
-    # Sort and filter prefixes. Smaller network goes firt, on tie larger prefixlen wins
+    # Sort and filter prefixes. Smaller network goes firt, on tie larger
+    # prefixlen wins
     prefixes.sort(key=lambda p: (p.network_address, p.prefixlen))
 
     # Split prefix list into aggregatable chunks

@@ -11,8 +11,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -76,7 +76,7 @@ def main() -> None:
         'prefixes',
         type=argparse.FileType('r'),
         nargs='?',
-        help='Text file of unsorted list of IPv4 or IPv6 prefixes. Use \'-\' for STDIN.',
+        help='Text file of unsorted list of IPv4 or IPv6 prefixes. Use \'-\' for STDIN.',  # noqa
         default=sys.stdin
     )
     parser.add_argument(
@@ -89,7 +89,7 @@ def main() -> None:
     parser.add_argument(
         '--strip-host-mask', '-s',
         dest='strip_host_mask',
-        help="Do not print netmask if prefix is a host route (/32 IPv4, /128 IPv6)",
+        help="Do not print netmask if prefix is a host route (/32 IPv4, /128 IPv6)",  # noqa
         action='store_true',
         default=False
     )
@@ -128,7 +128,11 @@ def main() -> None:
 
     try:
         # Aggregate
-        aggregates = aggregate_prefixes(prefixes, args.max_length, args.truncate)
+        aggregates = aggregate_prefixes(
+            prefixes,
+            args.max_length,
+            args.truncate
+        )
     except (ValueError, TypeError) as error:
         sys.exit(f'ERROR: {error}')
 

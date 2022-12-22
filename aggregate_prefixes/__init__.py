@@ -11,8 +11,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -27,15 +27,16 @@
 Aggregates IPv4 or IPv6 prefixes.
 
 Core method is aggrega_prefixes in module aggregate_prefixes.
-It gets an unsorted list IPv4 or IPv6 prefixes and returns a sorted list of aggregates.
+It gets an unsorted list IPv4 or IPv6 prefixes and returns a sorted list of
+aggregates.
 
 Example:
-	>>> from aggregate_prefixes.aggregate_prefixes import aggregate_prefixes
-	>>>
-	>>> prefixes = ["192.0.2.1/32", "192.0.2.3/32", "192.0.2.2/32"]
-	>>> print aggregate_prefixes(prefixes)
-	['192.0.2.1/32', '192.0.2.2/31']
-	>>>
+    >>> from aggregate_prefixes.aggregate_prefixes import aggregate_prefixes
+    >>>
+    >>> prefixes = ["192.0.2.1/32", "192.0.2.3/32", "192.0.2.2/32"]
+    >>> print aggregate_prefixes(prefixes)
+    ['192.0.2.1/32', '192.0.2.2/31']
+    >>>
 """
 
 from .aggregate_prefixes import aggregate_prefixes
@@ -48,3 +49,14 @@ from .__about__ import (
     __license__,
     __classifiers__
 )
+
+__all__ = [
+  'aggregate_prefixes',
+  '__version__',
+  '__author__',
+  '__author_email__',
+  '__url__',
+  '__description__',
+  '__license__',
+  '__classifiers__'
+]
