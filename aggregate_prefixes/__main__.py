@@ -98,7 +98,7 @@ def main() -> None:
         metavar='MASK',
         type=int,
         help='Truncate IP/mask to network/mask',
-        default=128
+        default=False
     )
     parser.add_argument(
         '--verbose', '-v',
