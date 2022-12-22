@@ -180,7 +180,7 @@ def aggregate_prefixes(
     prefixes = filtered_prefixes
 
     # Apply truncate
-    if truncate:
+    if truncate is not False and truncate < 128:
         prefixes = [
             ip_network(f'{prefix.network_address}/{truncate}', False)
             if prefix.prefixlen > truncate
