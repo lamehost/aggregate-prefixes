@@ -7,6 +7,7 @@ Errors go to STDERR.
 # Install
 ```
 git clone https://github.com/lamehost/aggregate-prefixes.git
+cd aggregate_prefixes
 poetry build
 pip install dist/aggregate_prefixes-0.7.0-py3-none-any.whl
 ```
