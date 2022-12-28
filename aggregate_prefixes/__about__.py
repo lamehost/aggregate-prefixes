@@ -2,7 +2,7 @@
 
 # MIT License
 
-# Copyright (c) 2019, Marco Marzetti <marco@lamehost.it>
+# Copyright (c) 2022, Marco Marzetti <marco@lamehost.it>
 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@
 """Provide version info to the package"""
 
 
-__version__ = "0.6.6"
+__version__ = "0.7.0"
 __author__ = "Marco Marzetti"
 __author_email__ = "marco@lamehost.it"
 __url__ = "https://github.com/lamehost/aggregate-prefixes/"
@@ -37,8 +37,7 @@ __classifiers__ = [
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Topic :: System :: Networking',
     'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 3.7',
-    'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
-    'Programming Language :: Python :: 3.10'
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11'
 ]

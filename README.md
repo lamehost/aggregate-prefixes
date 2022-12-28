@@ -16,12 +16,14 @@ positional arguments:
   prefixes              Text file of unsorted list of IPv4 or IPv6 prefixes.
                         Use '-' for STDIN.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
-  --max-length [LENGTH], -m [LENGTH]
+  --max-length LENGTH, -m LENGTH
                         Discard longer prefixes prior to processing
-  --truncate [MASK], -t [MASK]
-                        Ttruncate IP/mask to network/mask
+  --strip-host-mask, -s
+                        Do not print netmask if prefix is a host route (/32 IPv4, /128 IPv6)
+  --truncate MASK, -t MASK
+                        Truncate IP/mask to network/mask
   --verbose, -v         Display verbose information about the optimisations
   --version, -V         show program's version number and exit
 </pre>
@@ -41,8 +43,6 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 # Python compatibility
 Tested with:
- - Python 3.7
- - Python 3.8
  - Python 3.9
  - Python 3.10
  - Python 3.11
