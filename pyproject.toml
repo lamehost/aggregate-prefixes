@@ -15,6 +15,9 @@ coverage = "^7.0.1"
 flake8 = "^6.0.0"
 pytest = "^7.2.0"
 
+[tool.poetry.scripts]
+aggregate-prefixes = "aggregate_prefixes.__main__:main"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
