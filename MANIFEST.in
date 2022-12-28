@@ -1,4 +1,0 @@
-include *.md
-include LICENSE
-include requirements.txt
-recursive-include aggregate_prefixes *.py

@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "aggregate-prefixes"
+version = "0.7.0"
+description = ""
+authors = ["Marco Marzetti <marco@lamehost.it>"]
+readme = "README.md"
+packages = [{include = "aggregate_prefixes"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^2.15.9"
+coverage = "^7.0.1"
+flake8 = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
