@@ -14,15 +14,12 @@ pip install dist/aggregate_prefixes-0.7.0-py3-none-any.whl
 
 # CLI Syntax for executable
 ```
-usage: aggregate-prefixes [-h] [--max-length [LENGTH]] [--truncate [MASK]]
-                          [--verbose] [--version]
-                          prefixes
+usage: aggregate-prefixes [-h] [--max-length LENGTH] [--strip-host-mask] [--truncate MASK] [--verbose] [--version] [prefixes]
 
 Aggregates IPv4 or IPv6 prefixes from file or STDIN
 
 positional arguments:
-  prefixes              Text file of unsorted list of IPv4 or IPv6 prefixes.
-                        Use '-' for STDIN.
+  prefixes              Text file of unsorted list of IPv4 or IPv6 prefixes. Use '-' for STDIN.
 
 options:
   -h, --help            show this help message and exit
