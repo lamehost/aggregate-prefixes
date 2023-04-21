@@ -30,10 +30,11 @@ Provides CLI interface for package aggregate-prefixes
 import argparse
 import logging
 import sys
-from typing import Union
 from ipaddress import IPv4Network, IPv6Network
+from typing import Union
 
 from aggregate_prefixes import aggregate_prefixes
+
 from .__about__ import __version__ as VERSION
 
 
@@ -51,9 +52,8 @@ def strip_host_mask(prefix: Union[IPv4Network, IPv6Network]) -> str:
     --------
     str: Formatted prefix
     """
-    if (
-        (prefix.version == 4 and prefix.prefixlen == 32) or
-        (prefix.version == 6 and prefix.prefixlen == 128)
+    if (prefix.version == 4 and prefix.prefixlen == 32) or (
+        prefix.version == 6 and prefix.prefixlen == 128
     ):
         return str(prefix.network_address)
 
@@ -69,72 +69,68 @@ def main() -> None:
     """
 
     parser = argparse.ArgumentParser(
-        prog='aggregate-prefixes',
-        description='Aggregates IPv4 or IPv6 prefixes from file or STDIN'
+        prog="aggregate-prefixes",
+        description="Aggregates IPv4 or IPv6 prefixes from file or STDIN",
     )
     parser.add_argument(
-        'prefixes',
-        type=argparse.FileType('r'),
-        nargs='?',
-        help='Text file of unsorted list of IPv4 or IPv6 prefixes. Use \'-\' for STDIN.',  # noqa
-        default=sys.stdin
+        "prefixes",
+        type=argparse.FileType("r"),
+        nargs="?",
+        help="Text file of unsorted list of IPv4 or IPv6 prefixes. Use '-' for STDIN.",  # noqa
+        default=sys.stdin,
     )
     parser.add_argument(
-        '--max-length', '-m',
-        metavar='LENGTH',
+        "--max-length",
+        "-m",
+        metavar="LENGTH",
         type=int,
-        help='Discard longer prefixes prior to processing',
-        default=128
+        help="Discard longer prefixes prior to processing",
+        default=128,
     )
     parser.add_argument(
-        '--strip-host-mask', '-s',
-        dest='strip_host_mask',
+        "--strip-host-mask",
+        "-s",
+        dest="strip_host_mask",
         help="Do not print netmask if prefix is a host route (/32 IPv4, /128 IPv6)",  # noqa
-        action='store_true',
-        default=False
+        action="store_true",
+        default=False,
     )
     parser.add_argument(
-        '--truncate', '-t',
-        metavar='MASK',
+        "--truncate",
+        "-t",
+        metavar="MASK",
         type=int,
-        help='Truncate IP/mask to network/mask',
-        default=False
+        help="Truncate IP/mask to network/mask",
+        default=False,
     )
     parser.add_argument(
-        '--verbose', '-v',
-        help='Display verbose information about the optimisations',
-        action='store_true'
+        "--verbose",
+        "-v",
+        help="Display verbose information about the optimisations",
+        action="store_true",
     )
-    parser.add_argument(
-        '--version', '-V',
-        action='version',
-        version='%(prog)s ' + VERSION
-    )
+    parser.add_argument("--version", "-V", action="version", version="%(prog)s " + VERSION)
     args = parser.parse_args()
 
     # Read and cleanup prefixes
     prefixes = []
     for line in args.prefixes:
-        text = next(iter(line.split('#'))).strip()
+        text = next(iter(line.split("#"))).strip()
         if text:
-            prefixes += text.split(' ')
+            prefixes += text.split(" ")
 
     # Activate verbose logging
     if args.verbose:
         logging.basicConfig()
-        logger = logging.getLogger('aggregate_prefixes')
+        logger = logging.getLogger("aggregate_prefixes")
         logger.propagate = True
         logger.setLevel(logging.DEBUG)
 
     try:
         # Aggregate
-        aggregates = aggregate_prefixes(
-            prefixes,
-            args.max_length,
-            args.truncate
-        )
+        aggregates = aggregate_prefixes(prefixes, args.max_length, args.truncate)
     except (ValueError, TypeError) as error:
-        sys.exit(f'ERROR: {error}')
+        sys.exit(f"ERROR: {error}")
 
     # Define output formatting function
     if args.strip_host_mask:
@@ -143,10 +139,8 @@ def main() -> None:
         formatting_function = str
 
     # Process aggregates and print one per line
-    print(
-        '\n'.join(map(formatting_function, aggregates))
-    )
+    print("\n".join(map(formatting_function, aggregates)))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

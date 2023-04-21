@@ -39,24 +39,24 @@ Example:
     >>>
 """
 
-from .aggregate_prefixes import aggregate_prefixes
 from .__about__ import (
-    __version__,
     __author__,
     __author_email__,
-    __url__,
+    __classifiers__,
     __description__,
     __license__,
-    __classifiers__
+    __url__,
+    __version__,
 )
+from .aggregate_prefixes import aggregate_prefixes
 
 __all__ = [
-  'aggregate_prefixes',
-  '__version__',
-  '__author__',
-  '__author_email__',
-  '__url__',
-  '__description__',
-  '__license__',
-  '__classifiers__'
+    "aggregate_prefixes",
+    "__version__",
+    "__author__",
+    "__author_email__",
+    "__url__",
+    "__description__",
+    "__license__",
+    "__classifiers__",
 ]

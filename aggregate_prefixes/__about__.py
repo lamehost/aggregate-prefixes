@@ -33,11 +33,11 @@ __url__ = "https://github.com/lamehost/aggregate-prefixes/"
 __description__ = "Fast IPv4 and IPv6 prefix aggregator written in Python."
 __license__ = "MIT"
 __classifiers__ = [
-    'Intended Audience :: Developers',
-    'Topic :: Software Development :: Libraries :: Python Modules',
-    'Topic :: System :: Networking',
-    'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 3.9',
-    'Programming Language :: Python :: 3.10',
-    'Programming Language :: Python :: 3.11'
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Networking",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
 ]

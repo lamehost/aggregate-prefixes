@@ -28,17 +28,14 @@ Provides core functions for package aggregate-prefixes
 """
 
 
-from ipaddress import IPv4Network, IPv6Network, ip_network
 import logging
-from typing import Union, List, Iterator
-
+from ipaddress import IPv4Network, IPv6Network, ip_network
+from typing import Iterator, List, Union
 
 LOGGER = logging.getLogger(__name__)
 
 
-def find_aggregatables(
-    prefixes: List[Union[IPv4Network, IPv6Network]]
-) -> Iterator:
+def find_aggregatables(prefixes: List[Union[IPv4Network, IPv6Network]]) -> Iterator:
     """
     Split prefix lists into aggregatable chunks
 
@@ -99,7 +96,7 @@ def aggregate_aggregatable(
     generator:
         Aggregates serialized as either IPv4Network or IPv6Network
     """
-    LOGGER.debug('Aggregatables: %s',  ', '.join(map(str, aggregatable)))
+    LOGGER.debug("Aggregatables: %s", ", ".join(map(str, aggregatable)))
     aggregatable_end = aggregatable[-1].broadcast_address
 
     # Assume first item is an agggregte
@@ -112,24 +109,20 @@ def aggregate_aggregatable(
     for prefix in aggregatable:
         # Skip prefixes that are part of the current aggregate
         if aggregate_end and aggregate_end >= prefix.broadcast_address:
-            LOGGER.debug('  Skipping: %s', prefix)
+            LOGGER.debug("  Skipping: %s", prefix)
             continue
-        LOGGER.debug(' Prefix: %s', prefix)
+        LOGGER.debug(" Prefix: %s", prefix)
 
         # Iteratively reduce aggregate length
         for tentative_len in range(prefix.prefixlen, -1, -1):
-            tentative = ip_network(
-                f'{prefix.network_address}/{tentative_len}', False
-            )
-            LOGGER.debug('  Tentative aggregate: %s', tentative)
+            tentative = ip_network(f"{prefix.network_address}/{tentative_len}", False)
+            LOGGER.debug("  Tentative aggregate: %s", tentative)
             # If boundaries are exceeded, then exit the loop
             if (
-                prefix.network_address != tentative.network_address or
-                tentative.broadcast_address > aggregatable_end
+                prefix.network_address != tentative.network_address
+                or tentative.broadcast_address > aggregatable_end
             ):
-                LOGGER.debug(
-                    '  Boundaries exceeded by netmask: /%d', tentative_len
-                )
+                LOGGER.debug("  Boundaries exceeded by netmask: /%d", tentative_len)
                 break
 
             # At the end of every loop, consider the update aggregate to
@@ -138,7 +131,7 @@ def aggregate_aggregatable(
             aggregate_end = aggregate.broadcast_address
 
         # Return aggregate
-        LOGGER.debug(' Aggregate found: %s', aggregate)
+        LOGGER.debug(" Aggregate found: %s", aggregate)
         yield aggregate
 
 
@@ -182,7 +175,7 @@ def aggregate_prefixes(
     # Apply truncate
     if truncate is not False and truncate < 128:
         prefixes = [
-            ip_network(f'{prefix.network_address}/{truncate}', False)
+            ip_network(f"{prefix.network_address}/{truncate}", False)
             if prefix.prefixlen > truncate
             else prefix
             for prefix in prefixes
