@@ -76,7 +76,7 @@ def main() -> None:
         "prefixes",
         type=argparse.FileType("r"),
         nargs="?",
-        help="Text file of unsorted list of IPv4 or IPv6 prefixes. Use '-' for STDIN.",  # noqa
+        help="Text file of unsorted list of IPv4 or IPv6 prefixes. No argument means STDIN.",
         default=sys.stdin,
     )
     parser.add_argument(
@@ -91,7 +91,7 @@ def main() -> None:
         "--strip-host-mask",
         "-s",
         dest="strip_host_mask",
-        help="Do not print netmask if prefix is a host route (/32 IPv4, /128 IPv6)",  # noqa
+        help="Do not print netmask if prefix is a host route (/32 IPv4, /128 IPv6)",
         action="store_true",
         default=False,
     )
