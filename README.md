@@ -5,11 +5,22 @@ Gets a list of unsorted IPv4 or IPv6 prefixes from argument or SDTIN and returns
 Errors go to STDERR.
 
 # Install
+## From pip
+```
+pip install aggregate-prefixes
+```
+
+# From brew
+```
+brew install lamehost/aggregate-prefixes/aggregate-prefixes
+```
+
+## From source
 ```
 git clone https://github.com/lamehost/aggregate-prefixes.git
 cd aggregate_prefixes
 poetry build
-pip install dist/aggregate_prefixes-0.7.0-py3-none-any.whl
+pip install dist/aggregate_prefixes-0.7.1-py3-none-any.whl
 ```
 
 # CLI Syntax for executable
