@@ -20,7 +20,7 @@ pylint = "^2.15.9"
 coverage = "^7.0.1"
 flake8 = "^6.0.0"
 pytest = "^7.2.0"
-black = "^23.3.0"
+black = ">=23.3,<25.0"
 isort = "^5.12.0"
 pytest-cov = "^4.0.0"
 
