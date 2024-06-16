@@ -1,13 +1,17 @@
 # aggregate-prefixes
-Fast IPv4 and IPv6 prefix aggregator written in Python.  
+Fast IPv4 and IPv6 prefix aggregator written in pure Python (no dependency required).  
 
-Gets a list of unsorted IPv4 or IPv6 prefixes from argument or SDTIN and returns a sorted list of aggregates to STDOUT
-Errors go to STDERR.
+Aggregate-prefixes parses a list of unsorted IPv4 or IPv6 prefixes from either a file or SDTIN and returns a sorted list of aggregates to STDOUT. Errors go to STDERR.
 
 # Install
 ## From pip
 ```
 pip install aggregate-prefixes
+```
+
+# From poetry
+```
+poetry add git+https://github.com/lamehost/aggregate-prefixes.git
 ```
 
 # From brew
