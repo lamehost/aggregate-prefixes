@@ -9,12 +9,12 @@ Aggregate-prefixes parses a list of unsorted IPv4 or IPv6 prefixes from either a
 pip install aggregate-prefixes
 ```
 
-# From poetry
+## From poetry
 ```
 poetry add git+https://github.com/lamehost/aggregate-prefixes.git
 ```
 
-# From brew
+## From brew
 ```
 brew install lamehost/aggregate-prefixes/aggregate-prefixes
 ```
