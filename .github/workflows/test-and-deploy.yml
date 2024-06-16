@@ -45,11 +45,7 @@ jobs:
         with:
           python-version: "3.9"
       - name: Install pypa/build
-        run: |
-          python3 -m
-          pip install
-          build
-          --user
+        run: python3 -m pip install build --user
       - name: Build a binary wheel and a source tarball
         run: python3 -m build
       - name: Store the distribution packages
@@ -93,24 +89,15 @@ jobs:
       - name: Sign the dists with Sigstore
         uses: sigstore/gh-action-sigstore-python@v2.1.1
         with:
-          inputs: >-
-            ./dist/*.tar.gz
-            ./dist/*.whl
+          inputs: ./dist/*.tar.gz ./dist/*.whl
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: >-
-          gh release create
-          '${{ github.ref_name }}'
-          --repo '${{ github.repository }}'
-          --notes ""
+        run: gh release create '${{ github.ref_name }}' --repo '${{ github.repository }}' --notes ""
       - name: Upload artifact signatures to GitHub Release
         env:
           GITHUB_TOKEN: ${{ github.token }}
         # Upload to GitHub Release using the `gh` CLI.
         # `dist/` contains the built packages, and the
         # sigstore-produced signatures and certificates.
-        run: >-
-          gh release upload
-          '${{ github.ref_name }}' dist/**
-          --repo '${{ github.repository }}'
+        run: gh release upload '${{ github.ref_name }}' dist/** --repo '${{ github.repository }}'
