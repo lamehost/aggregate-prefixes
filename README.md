@@ -24,7 +24,7 @@ brew install lamehost/aggregate-prefixes/aggregate-prefixes
 git clone https://github.com/lamehost/aggregate-prefixes.git
 cd aggregate_prefixes
 poetry build
-pip install dist/aggregate_prefixes-0.7.1-py3-none-any.whl
+pip install dist/aggregate_prefixes-0.7.2-py3-none-any.whl
 ```
 
 # CLI Syntax for executable

@@ -11,6 +11,7 @@ description = ""
 authors = ["Marco Marzetti <marco@lamehost.it>"]
 readme = "README.md"
 packages = [{include = "aggregate_prefixes"}]
+homepage = "https://github.com/lamehost/aggregate-prefixes"
 
 [tool.poetry.dependencies]
 python = "^3.9"
