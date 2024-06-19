@@ -6,7 +6,7 @@ line-length = 100
 
 [tool.poetry]
 name = "aggregate-prefixes"
-version = "0.7.0"
+version = "0.7.2"
 description = ""
 authors = ["Marco Marzetti <marco@lamehost.it>"]
 readme = "README.md"
