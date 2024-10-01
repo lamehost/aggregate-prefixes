@@ -82,16 +82,16 @@ class TestAggregatePrefixes(unittest.TestCase):
         """Test if non contigous IPv4 prefixes are handled correctly"""
         pfxs = []
         for i in range(5, 200):
-            pfxs.append(f"{i}.0.0.0/8")
+            pfxs.append(f"192.0.2.{i}/32")
         outcome = [
-            ipaddress.ip_network("5.0.0.0/8"),
-            ipaddress.ip_network("6.0.0.0/7"),
-            ipaddress.ip_network("8.0.0.0/5"),
-            ipaddress.ip_network("16.0.0.0/4"),
-            ipaddress.ip_network("32.0.0.0/3"),
-            ipaddress.ip_network("64.0.0.0/2"),
-            ipaddress.ip_network("128.0.0.0/2"),
-            ipaddress.ip_network("192.0.0.0/5")
+            ipaddress.ip_network("192.0.2.5/32"),
+            ipaddress.ip_network("192.0.2.6/31"),
+            ipaddress.ip_network("192.0.2.8/29"),
+            ipaddress.ip_network("192.0.2.16/28"),
+            ipaddress.ip_network("192.0.2.32/27"),
+            ipaddress.ip_network("192.0.2.64/26"),
+            ipaddress.ip_network("192.0.2.128/26"),
+            ipaddress.ip_network("192.0.2.192/29"),
         ]
         self.assertEqual(list(aggregate_prefixes(pfxs)), outcome)
 
