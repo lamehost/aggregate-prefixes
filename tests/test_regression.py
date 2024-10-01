@@ -49,23 +49,23 @@ class TestAggregatePrefixes(unittest.TestCase):
     def test_00__default_wins(self):
         """Test if default covers all the other prefixes"""
         self.assertEqual(
-            list(aggregate_prefixes(["0.0.0.0/0", "10.0.0.0/16"])),
+            list(aggregate_prefixes(["0.0.0.0/0", "192.0.2.0/24"])),
             [ipaddress.ip_network("0.0.0.0/0")]
         )
 
     def test_01__join_two(self):
         """Test if contigous prefixes get aggregated"""
         self.assertEqual(
-            list(aggregate_prefixes(["10.0.0.0/8", "11.0.0.0/8"])),
-            [ipaddress.ip_network("10.0.0.0/7")]
+            list(aggregate_prefixes(["192.0.2.0/25", "192.0.2.128/25"])),
+            [ipaddress.ip_network("192.0.2.0/24")]
         )
 
     def test_02__mix_v4_v6_default(self):
         """Test if error is raised when mixing IPv4 and IPv6"""
         with self.assertRaises(Exception) as context:
-            list(aggregate_prefixes(["0.0.0.0/0", "::/0"]))
-        self.assertTrue(
-            "are not of the same version" in str(context.exception)
+            list(aggregate_prefixes(["192.0.2.0/24", "2001:db8::/32"]))
+        self.assertIn(
+            "are not of the same version", str(context.exception)
         )
 
     def test_03__lot_of_ipv4(self):
@@ -106,51 +106,51 @@ class TestAggregatePrefixes(unittest.TestCase):
         """Test if error is raised with non IP input"""
         stub_stdouts(self)
         with self.assertRaises(Exception) as context:
-            list(aggregate_prefixes(["WRONG", "10.0.0.0/24"]))
-        self.assertTrue(
-            "'WRONG' does not appear" in str(context.exception)
+            list(aggregate_prefixes(["WRONG", "192.0.2.0/24"]))
+        self.assertIn(
+            "'WRONG' does not appear", str(context.exception)
         )
 
     def test_07__main(self):
         """Test if it can handle empty lines, spaces and comments"""
         stub_stdin(
             self,
-            '1.1.1.24/29\n1.1.1.0/24\n#WRONG\n1.1.1.1/32 1.1.0.0/24\n\n'
+            '192.0.2.0/29\n192.0.2.0/25\n#WRONG\n192.0.2.128/26 192.0.2.192/26\n\n'
         )
         stub_stdouts(self)
         with patch.object(sys, 'argv', ["prog.py", "-"]):
             cli_main()
-        self.assertEqual(sys.stdout.getvalue(), '1.1.0.0/23\n')
+        self.assertEqual(sys.stdout.getvalue(), '192.0.2.0/24\n')
 
     def test_08__maxlength(self):
         """Test if max-length is handled correctly"""
-        stub_stdin(self, '10.0.0.0/24\n10.0.1.0/25\n10.0.1.128/25\n')
+        stub_stdin(self, '192.0.2.0/25\n192.0.2.128/26\n192.0.2.192/26\n')
         stub_stdouts(self)
-        with patch.object(sys, 'argv', ["prog.py", "-m", "24", "-"]):
+        with patch.object(sys, 'argv', ["prog.py", "-m", "25", "-"]):
             cli_main()
-        self.assertEqual(sys.stdout.getvalue(), '10.0.0.0/24\n')
+        self.assertEqual(sys.stdout.getvalue(), '192.0.2.0/25\n')
 
     def test_09__truncate(self):
         """Test if truncate is handled correctly"""
-        stub_stdin(self, '10.0.0.1/32\n10.0.0.2/32\n10.0.0.3/32\n')
+        stub_stdin(self, '192.0.2.1/32\n192.0.2.2/32\n192.0.2.3/32\n')
         stub_stdouts(self)
         with patch.object(sys, 'argv', ["prog.py", "-t", "31", "-"]):
             cli_main()
-        self.assertEqual(sys.stdout.getvalue(), '10.0.0.0/30\n')
+        self.assertEqual(sys.stdout.getvalue(), '192.0.2.0/30\n')
 
-        stub_stdin(self, '10.0.0.1/32\n10.0.0.2/32\n10.0.0.3/32\n')
+        stub_stdin(self, '192.0.2.1/32\n192.0.2.2/32\n192.0.2.3/32\n')
         stub_stdouts(self)
         with patch.object(sys, 'argv', ["prog.py", "-t", "0", "-"]):
             cli_main()
         self.assertEqual(sys.stdout.getvalue(), '0.0.0.0/0\n')
 
     def test_10__no_host_mask(self):
-        """Test if truncate is handled correctly"""
-        stub_stdin(self, '10.0.0.1/32\n10.0.0.2/32\n10.0.0.3/32\n')
+        """Test if no mask is handled correctly"""
+        stub_stdin(self, '192.0.2.1/32\n192.0.2.2/32\n192.0.2.3/32\n')
         stub_stdouts(self)
         with patch.object(sys, 'argv', ["prog.py", "-s", "-"]):
             cli_main()
-        self.assertEqual(sys.stdout.getvalue(), '10.0.0.1\n10.0.0.2/31\n')
+        self.assertEqual(sys.stdout.getvalue(), '192.0.2.1\n192.0.2.2/31\n')
 
 
 class StringIO(io.StringIO):
