@@ -38,7 +38,7 @@ LOGGER = logging.getLogger(__name__)
 
 def find_aggregatables(
     prefixes: list[Union[IPv4Network, IPv6Network]]
-) -> Iterator[Union[IPv4Network | IPv6Network]]:
+) -> Iterator[Union[IPv4Network, IPv6Network]]:
     """
     Split prefix lists into aggregatable chunks
 
@@ -50,7 +50,7 @@ def find_aggregatables(
 
     Returns
     -------
-    Iterator[Union[IPv4Network | IPv6Network]]:
+    Iterator[Union[IPv4Network, IPv6Network]]:
         Iterable made of sorted list of aggregatable IPv4 or IPv6 prefixes
         serialized as either IPv4Network or IPv6Network
     """
@@ -84,7 +84,7 @@ def find_aggregatables(
 
 def aggregate_aggregatable(
     aggregatable: list[Union[IPv4Network, IPv6Network]],
-) -> Iterator[Union[IPv4Network | IPv6Network]]:
+) -> Iterator[Union[IPv4Network, IPv6Network]]:
     """
     Aggregates aggregatable chunks
 
@@ -96,7 +96,7 @@ def aggregate_aggregatable(
 
     Returns
     -------
-    Iterator[Union[IPv4Network | IPv6Network]]:
+    Iterator[Union[IPv4Network, IPv6Network]]:
         Aggregates serialized as either IPv4Network or IPv6Network
     """
     LOGGER.debug("Aggregatables: %s", ", ".join(map(str, aggregatable)))
@@ -139,7 +139,7 @@ def aggregate_aggregatable(
 
 
 def aggregate_prefixes(
-    prefixes: list[Union[str | IPv4Network | IPv6Network]],
+    prefixes: list[Union[str, IPv4Network, IPv6Network]],
     max_length: int = 128,
     truncate: int = False,
 ) -> Iterator[Union[IPv4Network, IPv6Network]]:
@@ -151,7 +151,7 @@ def aggregate_prefixes(
 
     Parameters
     ----------
-    prefixes : list[Union[str | IPv4Network | IPv6Network]]
+    prefixes : list[Union[str, IPv4Network, IPv6Network]]
         Unsorted list of IPv4 or IPv6 prefixes serialized as either string,
         IPv4Network or IPv6Network
     max_length: int
