@@ -29,25 +29,28 @@ Provides core functions for package aggregate-prefixes
 
 
 import logging
-from ipaddress import IPv4Network, IPv6Network, ip_network
 from collections.abc import Iterator
+from ipaddress import IPv4Network, IPv6Network, ip_network
+from typing import Union
 
 LOGGER = logging.getLogger(__name__)
 
 
-def find_aggregatables(prefixes: list[IPv4Network | IPv6Network]) -> Iterator:
+def find_aggregatables(
+    prefixes: list[Union[IPv4Network, IPv6Network]]
+) -> Iterator[Union[IPv4Network | IPv6Network]]:
     """
     Split prefix lists into aggregatable chunks
 
     Parameters:
     -----------
-    prefixes: list
+    prefixes: list[Union[IPv4Network, IPv6Network]]
         Sorted list of IPv4 or IPv6 prefixes serialized as either IPv4Network
         or IPv6Network
 
     Returns
     -------
-    generator:
+    Iterator[Union[IPv4Network | IPv6Network]]:
         Iterable made of sorted list of aggregatable IPv4 or IPv6 prefixes
         serialized as either IPv4Network or IPv6Network
     """
@@ -80,20 +83,20 @@ def find_aggregatables(prefixes: list[IPv4Network | IPv6Network]) -> Iterator:
 
 
 def aggregate_aggregatable(
-    aggregatable: list[IPv4Network | IPv6Network],
-) -> Iterator[IPv4Network | IPv6Network]:
+    aggregatable: list[Union[IPv4Network, IPv6Network]],
+) -> Iterator[Union[IPv4Network | IPv6Network]]:
     """
     Aggregates aggregatable chunks
 
     Parameters:
     -----------
-    aggregatable : list
+    aggregatable : list[Union[IPv4Network, IPv6Network]]
         Sorted list of aggregatable IPv4 or IPv6 prefixes serialized as either
         IPv4Network or IPv6Network
 
     Returns
     -------
-    generator:
+    Iterator[Union[IPv4Network | IPv6Network]]:
         Aggregates serialized as either IPv4Network or IPv6Network
     """
     LOGGER.debug("Aggregatables: %s", ", ".join(map(str, aggregatable)))
@@ -136,10 +139,10 @@ def aggregate_aggregatable(
 
 
 def aggregate_prefixes(
-    prefixes: list[str | IPv4Network | IPv6Network],
+    prefixes: list[Union[str | IPv4Network | IPv6Network]],
     max_length: int = 128,
     truncate: int = False,
-) -> Iterator[IPv4Network, IPv6Network]:
+) -> Iterator[Union[IPv4Network, IPv6Network]]:
     """
     Aggregates IPv4 or IPv6 prefixes.
 
@@ -148,7 +151,7 @@ def aggregate_prefixes(
 
     Parameters
     ----------
-    prefixes : list
+    prefixes : list[Union[str | IPv4Network | IPv6Network]]
         Unsorted list of IPv4 or IPv6 prefixes serialized as either string,
         IPv4Network or IPv6Network
     max_length: int
@@ -158,7 +161,7 @@ def aggregate_prefixes(
 
     Returns
     -------
-    generator
+    Iterator[Union[IPv4Network, IPv6Network]]:
         Sorted iterable of IPv4 or IPv6 aggregated prefixes serialized as
         either IPv4Network or IPv6Network
     """
