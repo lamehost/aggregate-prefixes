@@ -139,7 +139,9 @@ def main() -> None:
         formatting_function = str
 
     # Process aggregates and print one per line
-    print("\n".join(map(formatting_function, aggregates)))
+    aggregates = "\n".join(map(formatting_function, aggregates))
+    if aggregates:
+        print(aggregates)
 
 
 if __name__ == "__main__":
