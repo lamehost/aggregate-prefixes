@@ -30,12 +30,12 @@ Provides core functions for package aggregate-prefixes
 
 import logging
 from ipaddress import IPv4Network, IPv6Network, ip_network
-from typing import Iterator, List, Union
+from collections.abc import Iterator
 
 LOGGER = logging.getLogger(__name__)
 
 
-def find_aggregatables(prefixes: List[Union[IPv4Network, IPv6Network]]) -> Iterator:
+def find_aggregatables(prefixes: list[IPv4Network | IPv6Network]) -> Iterator:
     """
     Split prefix lists into aggregatable chunks
 
@@ -80,8 +80,8 @@ def find_aggregatables(prefixes: List[Union[IPv4Network, IPv6Network]]) -> Itera
 
 
 def aggregate_aggregatable(
-    aggregatable: List[Union[IPv4Network, IPv6Network]]
-) -> Iterator[Union[IPv4Network, IPv6Network]]:
+    aggregatable: list[IPv4Network | IPv6Network],
+) -> Iterator[IPv4Network | IPv6Network]:
     """
     Aggregates aggregatable chunks
 
@@ -136,10 +136,10 @@ def aggregate_aggregatable(
 
 
 def aggregate_prefixes(
-    prefixes: List[Union[str, IPv4Network, IPv6Network]],
+    prefixes: list[str | IPv4Network | IPv6Network],
     max_length: int = 128,
     truncate: int = False,
-) -> Iterator[Union[IPv4Network, IPv6Network]]:
+) -> Iterator[IPv4Network, IPv6Network]:
     """
     Aggregates IPv4 or IPv6 prefixes.
 
@@ -175,9 +175,11 @@ def aggregate_prefixes(
     # Apply truncate
     if truncate is not False and truncate < 128:
         prefixes = [
-            ip_network(f"{prefix.network_address}/{truncate}", False)
-            if prefix.prefixlen > truncate
-            else prefix
+            (
+                ip_network(f"{prefix.network_address}/{truncate}", False)
+                if prefix.prefixlen > truncate
+                else prefix
+            )
             for prefix in prefixes
         ]
 

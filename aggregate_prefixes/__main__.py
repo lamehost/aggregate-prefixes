@@ -31,21 +31,20 @@ import argparse
 import logging
 import sys
 from ipaddress import IPv4Network, IPv6Network
-from typing import Union
 
 from aggregate_prefixes import aggregate_prefixes
 
 from .__about__ import __version__ as VERSION
 
 
-def strip_host_mask(prefix: Union[IPv4Network, IPv6Network]) -> str:
+def strip_host_mask(prefix: [IPv4Network | IPv6Network]) -> str:
     """
     Prefix formatting function.
     Removes netmask if prefix is a host route (/32 IPv4 or /128 IPv6)
 
     Arguments:
     ----------
-    prefix: Union[IPv4Network, IPv6Network]
+    prefix: [IPv4Network | IPv6Network]
         Prefix to be formatted
 
     Returns:
