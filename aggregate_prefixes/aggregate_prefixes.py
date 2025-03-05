@@ -37,7 +37,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 def find_aggregatables(
-    prefixes: list[Union[IPv4Network, IPv6Network]]
+    prefixes: list[Union[IPv4Network, IPv6Network]],
 ) -> Iterator[Union[IPv4Network, IPv6Network]]:
     """
     Split prefix lists into aggregatable chunks
