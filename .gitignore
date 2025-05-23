@@ -61,3 +61,5 @@ target/
 
 #Custom
 internet-table
+.vscode
+.sonarlint/
