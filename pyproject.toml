@@ -14,16 +14,16 @@ packages = [{include = "aggregate_prefixes"}]
 homepage = "https://github.com/lamehost/aggregate-prefixes"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 
 [tool.poetry.group.dev.dependencies]
-pylint = "^3.3.1"
+pylint = "^4.0.5"
 coverage = "^7.0.1"
-black = "^25.1.0"
-isort = "^6.0.1"
+black = "^26.3.1"
+isort = "^8.0.1"
 bandit = "^1.7.9"
-pytest = "^8.3.3"
-pytest-cov = "^6.0.0"
+pytest = "^9.0.2"
+pytest-cov = "^7.0.0"
 flake8 = "^7.1.1"
 
 [tool.poetry.scripts]

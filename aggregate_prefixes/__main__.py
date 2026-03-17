@@ -33,7 +33,7 @@ import sys
 from ipaddress import IPv4Network, IPv6Network
 from typing import Union
 
-from aggregate_prefixes import aggregate_prefixes
+from aggregate_prefixes import aggregate_prefixes as _aggregate_prefixes
 
 from .__about__ import __version__ as VERSION
 
@@ -126,11 +126,11 @@ def main() -> None:
         logger.propagate = True
         logger.setLevel(logging.DEBUG)
 
-    try:
-        # Aggregate
-        aggregates = aggregate_prefixes(prefixes, args.max_length, args.truncate)
-    except (ValueError, TypeError) as error:
-        sys.exit(f"ERROR: {error}")
+    #try:
+    #    # Aggregate
+    aggregates = _aggregate_prefixes(prefixes, args.max_length, args.truncate)
+    #except (ValueError, TypeError) as error:
+    #    sys.exit(f"ERROR: {error}")
 
     # Define output formatting function
     if args.strip_host_mask:

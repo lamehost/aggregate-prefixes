@@ -30,6 +30,7 @@ Provides core functions for package aggregate-prefixes
 
 import logging
 from collections.abc import Iterator
+from concurrent.futures import ProcessPoolExecutor
 from ipaddress import IPv4Network, IPv6Network, ip_network
 from typing import Union
 
@@ -138,6 +139,9 @@ def aggregate_aggregatable(
         yield aggregate
 
 
+def multiprocessing_wrapper(aggregatable):
+    return list(aggregate_aggregatable(aggregatable))
+
 def aggregate_prefixes(
     prefixes: list[Union[str, IPv4Network, IPv6Network]],
     max_length: int = 128,
@@ -194,5 +198,7 @@ def aggregate_prefixes(
     aggregatables = find_aggregatables(prefixes)
 
     # Aggregate aggregatables
-    for aggregatable in aggregatables:
-        yield from aggregate_aggregatable(aggregatable)
+    with ProcessPoolExecutor() as executor:
+        for aggregate in executor.map(multiprocessing_wrapper, aggregatables):
+            yield from aggregate
+

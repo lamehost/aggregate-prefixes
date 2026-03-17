@@ -48,10 +48,12 @@ from .__about__ import (
     __url__,
     __version__,
 )
+# from .__main__ import strip_host_mask
 from .aggregate_prefixes import aggregate_prefixes
 
 __all__ = [
     "aggregate_prefixes",
+#    "strip_host_mask",
     "__version__",
     "__author__",
     "__author_email__",
