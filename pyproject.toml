@@ -17,7 +17,7 @@ homepage = "https://github.com/lamehost/aggregate-prefixes"
 python = "^3.10"
 
 [tool.poetry.group.dev.dependencies]
-pylint = "^4.0.5"
+pylint = "^4.0.9"
 coverage = "^7.0.1"
 black = "^26.10.1"
 isort = "^8.0.1"
