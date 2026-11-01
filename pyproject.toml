@@ -14,7 +14,7 @@ packages = [{include = "aggregate_prefixes"}]
 homepage = "https://github.com/lamehost/aggregate-prefixes"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^4.1.3"
